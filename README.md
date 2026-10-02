@@ -18,7 +18,11 @@ She needs no account, collects no data and works offline. She is a cartoon and s
 - `SYSTEM_PROMPT.txt`: the system prompt, for anyone who wants the optional AI lines from a local model.
 - `approved_banks/`: the starter games, looks and presentations. She uses nothing outside them.
 
-The app itself is being built from the brief. Until it lands here, the brief and the banks are the product, and anyone may build it.
+## Run the app
+
+You need Node.js. In this folder, run `npm install` and then `npm run dev`, and open the address it prints. `npm test` runs the 18 safety and behavior tests. The app needs no account, no key and no internet. The optional AI lines are off until a caregiver turns them on, and they only talk to a local Ollama model.
+
+The first build was made by Gemini in Google AI Studio from `AI-STUDIO-PROMPT.md` on 2026-10-02 and judged by Claude: 18 of 18 tests pass, the kid screen has no text box, and every button was tried on screen.
 
 ## Free to everyone
 
