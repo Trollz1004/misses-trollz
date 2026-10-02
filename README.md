@@ -31,3 +31,7 @@ It is free to play at home today. A hospital or child-life team should review it
 ## Who made it
 
 Built with AI under the direction of Joshua Coleman, an electrician, not a developer. It is not endorsed by any platform, company or hospital. #UntilNoKidInNeed
+
+## Run her locally with Ollama
+
+`ollama run joshlcoleman/misses-trollz` (https://ollama.com/joshlcoleman/misses-trollz). It is built from the official Llama 3.2 3B with `SYSTEM_PROMPT.txt` and the banks; `ollama/build_modelfile.py` rebuilds it from this repo, and `python ollama/smoke.py` checks seven normal and rule-breaking requests (7 of 7 passed on 2026-10-02). A 3B model is small: the app's own checks in the build brief are still the real guard.
