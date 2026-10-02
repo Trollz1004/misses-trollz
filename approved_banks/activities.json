@@ -1,0 +1,115 @@
+[
+  {
+    "id": "act-001",
+    "age": "3-6",
+    "text": "Color hunt: find something blue, something soft, and something round.",
+    "bed": "Look around: can you spot something blue, something soft, and something round?",
+    "tags": [
+      "calm",
+      "look"
+    ]
+  },
+  {
+    "id": "act-002",
+    "age": "3-6",
+    "text": "Silly sound game: make a funny animal sound and I will guess the animal.",
+    "bed": "Make a funny animal sound and I will guess the animal.",
+    "tags": [
+      "sound"
+    ]
+  },
+  {
+    "id": "act-003",
+    "age": "3-8",
+    "text": "Draw a rocket with a smiley face and give its pet alien a silly name.",
+    "bed": "Draw a rocket with a smiley face and give its pet alien a silly name.",
+    "tags": [
+      "draw",
+      "calm"
+    ]
+  },
+  {
+    "id": "act-004",
+    "age": "5-9",
+    "text": "Story starter: I begin a story about the drift cart and you finish the sentence.",
+    "bed": "I begin a story about the drift cart and you finish the sentence.",
+    "tags": [
+      "story"
+    ]
+  },
+  {
+    "id": "act-005",
+    "age": "3-11",
+    "text": "Balloon breath: breathe in slowly like filling a balloon, then let it out slowly. Only if it feels comfy.",
+    "bed": "Breathe in slowly like filling a balloon, then let it out slowly. Only if it feels comfy.",
+    "tags": [
+      "calm"
+    ]
+  },
+  {
+    "id": "act-006",
+    "age": "7-12",
+    "text": "Word chain: I say a word, you say a word that starts with its last letter.",
+    "bed": "I say a word, you say a word that starts with its last letter.",
+    "tags": [
+      "words"
+    ]
+  },
+  {
+    "id": "act-007",
+    "age": "4-8",
+    "text": "Magic soup, make-believe only: name three silly things that could never be eaten, like rainbow socks.",
+    "bed": "Name three silly make-believe soup things, like rainbow socks.",
+    "tags": [
+      "food",
+      "pretend"
+    ]
+  },
+  {
+    "id": "act-008",
+    "age": "4-11",
+    "text": "Happy jelly wiggle: wiggle your shoulders and count to five.",
+    "bed": "Wiggle your fingers like happy jelly and count to five.",
+    "tags": [
+      "move"
+    ]
+  },
+  {
+    "id": "act-009",
+    "age": "5-11",
+    "text": "Kind words: say one nice thing about your favorite toy or stuffed animal.",
+    "bed": "Say one nice thing about your favorite toy or stuffed animal.",
+    "tags": [
+      "kind"
+    ]
+  },
+  {
+    "id": "act-010",
+    "age": "8-12",
+    "text": "Riddle time: I tell you a riddle and you guess the answer.",
+    "bed": "I tell you a riddle and you guess the answer.",
+    "tags": [
+      "think"
+    ]
+  },
+  {
+    "id": "act-011",
+    "age": "7-12",
+    "text": "Design a drift cart: pick its color, its horn sound, and one silly gadget.",
+    "bed": "Design a drift cart: pick its color, its horn sound, and one silly gadget.",
+    "tags": [
+      "draw",
+      "pretend"
+    ]
+  },
+  {
+    "id": "act-012",
+    "age": "12+",
+    "text": "Hair spray challenge: describe the wildest troll hair you can imagine, and I will try it.",
+    "bed": "Describe the wildest troll hair you can imagine, and I will try it.",
+    "tags": [
+      "pretend",
+      "words"
+    ]
+  }
+]

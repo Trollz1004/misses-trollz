@@ -1,0 +1,20 @@
+[
+  {
+    "id": "pres-001",
+    "name": "Misses Trollz",
+    "pronouns": "she/her",
+    "default": true
+  },
+  {
+    "id": "pres-002",
+    "name": "Mister Trollz",
+    "pronouns": "he/him",
+    "default": false
+  },
+  {
+    "id": "pres-003",
+    "name": "Trollz Crew",
+    "pronouns": "they/them",
+    "default": false
+  }
+]

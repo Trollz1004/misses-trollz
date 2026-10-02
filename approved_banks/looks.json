@@ -1,0 +1,93 @@
+[
+  {
+    "id": "look-001",
+    "kind": "hair",
+    "text": "Hair sprayed straight up like a troll doll, then it slowly settles.",
+    "spoken": "My hair just shot straight up!",
+    "tags": [
+      "silly"
+    ]
+  },
+  {
+    "id": "look-002",
+    "kind": "outfit",
+    "text": "Puffy inflatable crash suit for the drift cart ride; she bounces softly.",
+    "spoken": "I'm in my puffy bounce suit. Boing!",
+    "tags": [
+      "silly",
+      "bounce"
+    ]
+  },
+  {
+    "id": "look-003",
+    "kind": "outfit",
+    "text": "Giant floppy elephant-ear hat that flaps once.",
+    "spoken": "My big floppy ear hat just flapped!",
+    "tags": [
+      "silly"
+    ]
+  },
+  {
+    "id": "look-004",
+    "kind": "animation",
+    "text": "Genie lamp poof: a soft puff of smoke and a new outfit appears.",
+    "spoken": "Poof! The genie lamp changed my outfit.",
+    "tags": [
+      "magic"
+    ]
+  },
+  {
+    "id": "look-005",
+    "kind": "outfit",
+    "text": "Sparkly cape with cartoon stars.",
+    "spoken": "I'm wearing my starry cape.",
+    "tags": [
+      "calm"
+    ]
+  },
+  {
+    "id": "look-006",
+    "kind": "outfit",
+    "text": "Rainbow hoodie with friendly patches.",
+    "spoken": "Rainbow hoodie on!",
+    "tags": [
+      "calm"
+    ]
+  },
+  {
+    "id": "look-007",
+    "kind": "outfit",
+    "text": "Racing helmet and goggles, ready for Trollz.",
+    "spoken": "Helmet on, goggles down, ready to ride!",
+    "tags": [
+      "drift-cart"
+    ]
+  },
+  {
+    "id": "look-008",
+    "kind": "animation",
+    "text": "Cape swirl, one slow turn.",
+    "spoken": "I just did a slow cape swirl.",
+    "tags": [
+      "calm"
+    ]
+  },
+  {
+    "id": "look-009",
+    "kind": "animation",
+    "text": "Gentle confetti drift, slow, no flashing.",
+    "spoken": "Confetti is floating down.",
+    "tags": [
+      "calm"
+    ]
+  },
+  {
+    "id": "look-010",
+    "kind": "animation",
+    "text": "Drift cart zooms past in the background and honks.",
+    "spoken": "Was that Trollz? I miss him already!",
+    "tags": [
+      "drift-cart"
+    ]
+  }
+]
