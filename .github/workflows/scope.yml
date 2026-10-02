@@ -1,0 +1,9 @@
+name: Approved scope
+on: [push, pull_request]
+jobs:
+  scope:
+    name: Approved scope check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tests/check_scope.py
