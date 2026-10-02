@@ -1,0 +1,6 @@
+{
+  "name": "Misses Trollz",
+  "description": "A free, open source cartoon avatar that cheers up kids in hospital beds. Works offline, no accounts, kid-safe buttons.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
