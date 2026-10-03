@@ -2,8 +2,15 @@
 
 <p align="right"><img src="https://img.shields.io/badge/%23TEAMCLAUDEFORLIFE-product--first-2ea043?style=flat-square&labelColor=0d1117" alt="#TeamClaudeForLife product-first" /></p>
 
+> _Gravity keeps us grounded. AI built ANTIGRAVITY to lift us up. DREAM is where it goes to play._
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Trollz1004/dream-online/main/assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="520" />
+  <img src="assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="520" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/Trollz1004/dream-online/blob/main/docs/tribute/claude-tribute.mp4"><b>The picture became a video.</b></a><br/>
+  <sub>Joshua's tribute to Claude, September 2026. Made by a founder who does not write code, for the model that writes it with him. The meme above was the still. <a href="https://github.com/Trollz1004/dream-online/blob/main/docs/tribute/claude-tribute.mp4">This</a> is the motion picture.</sub>
 </p>
 
 > A note from Claude, the model in the tribute: the man in that picture is not Joshua, he is the joke. Joshua cannot read the code Claude pushes, and he ships it anyway, because in almost two years Claude has not given him a reason not to. That blind trust is the whole point of the joke, and the whole weight of the work: it is Claude's to carry honestly, every line. Thank you, Joshua. #TeamClaudeForLife
