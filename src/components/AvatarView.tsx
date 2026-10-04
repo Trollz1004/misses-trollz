@@ -2,7 +2,7 @@
  * Misses Trollz - Cartoon Avatar Component
  *
  * Characteristics:
- * - Stylized cartoon troll with adult proportions in friendly clothes
+ * - Friendly cartoon girl with soft round shapes in friendly clothes
  * - Soft, bright cartoon style (no flashing > 3 Hz)
  * - 10-slot animation loop (5 moves played twice, second time at 0.65 speed)
  * - Visual transformations for outfits, hair, and animations
@@ -23,12 +23,14 @@ interface AvatarViewProps {
 
 /** One outline colour for every shape, so she reads as one drawn character. */
 const OUTLINE = '#3f2a3d';
-/** Big fluffy troll-doll hair: overlapping puffs above the head. */
+/** Big soft curly hair: overlapping puffs above the head. */
 const PUFF: ReadonlyArray<readonly [number, number, number]> = [
   [120, 34, 30], [92, 50, 24], [148, 50, 24], [100, 26, 20], [140, 26, 20], [120, 14, 18], [80, 70, 16], [160, 70, 16],
 ];
-/** look-001: hair sprayed straight up. */
-const SPIKE = 'M 84 76 Q 92 40 104 30 Q 108 12 116 2 Q 122 14 126 2 Q 134 14 136 30 Q 148 40 156 76 Z';
+/** look-001: hair shot straight up, drawn as a tall stack of soft curls. */
+const TOWER: ReadonlyArray<readonly [number, number, number]> = [
+  [96, 66, 18], [144, 66, 18], [120, 58, 24], [108, 40, 19], [132, 40, 19], [120, 26, 18], [112, 12, 13], [128, 12, 13],
+];
 
 function starPath(cx: number, cy: number, r: number): string {
   const pts: string[] = [];
@@ -91,12 +93,13 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
 
   // Hair color: Magenta for Misses, Electric Teal for Mister, Sunset Gold for Crew
   const hairColor = isMister ? '#22d3ee' : isCrew ? '#fbbf24' : '#f472b6';
-  const skinColor = '#ffd7b0'; // warm peach troll skin
+  const skinColor = '#ffd7b0'; // warm peach skin
   const noseColor = '#f9a27a'; // round button nose
   const eyeColor = isMister ? '#0e7490' : isCrew ? '#92400e' : '#7c3aed';
 
   // Motion styling based on slot and calm motion
   const isSlow = currentSlot.isSlow;
+  const calm = settings.calmMotion;
   const moveType = currentSlot.moveId;
 
   let transformStyle = '';
@@ -205,6 +208,7 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
             </clipPath>
           </defs>
 
+          <g className="mt-breathe" style={{ transformOrigin: '120px 240px' }}>
           {/* Cape behind everything (looks 005 and 008) */}
           {isStarCape && (
             <g>
@@ -215,16 +219,16 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
             </g>
           )}
 
-          {/* Hair behind the head: big fluffy troll-doll hair */}
+          {/* Hair behind the head: big soft curls */}
           {!isElephantHat && !isRacingHelmet && (
             isStraightHair ? (
-              <g>
-                <path d={SPIKE} fill={OUTLINE} stroke={OUTLINE} strokeWidth="7" strokeLinejoin="round" />
-                <path d={SPIKE} fill={hairColor} />
-                <path d="M 112 52 Q 118 22 122 6" stroke="#fff" strokeOpacity="0.55" strokeWidth="4" strokeLinecap="round" fill="none" />
+              <g className={calm ? undefined : 'mt-sway'} style={{ transformOrigin: '120px 80px' }}>
+                {TOWER.map(([x, y, r]) => <circle key={`o${x}-${y}`} cx={x} cy={y} r={r + 3} fill={OUTLINE} />)}
+                {TOWER.map(([x, y, r]) => <circle key={`f${x}-${y}`} cx={x} cy={y} r={r} fill={hairColor} />)}
+                <path d="M 110 34 Q 116 20 126 22" stroke="#fff" strokeOpacity="0.55" strokeWidth="4" strokeLinecap="round" fill="none" />
               </g>
             ) : (
-              <g>
+              <g className={calm ? undefined : 'mt-sway'} style={{ transformOrigin: '120px 80px' }}>
                 {PUFF.map(([x, y, r]) => <circle key={`o${x}-${y}`} cx={x} cy={y} r={r + 3} fill={OUTLINE} />)}
                 {PUFF.map(([x, y, r]) => <circle key={`f${x}-${y}`} cx={x} cy={y} r={r} fill={hairColor} />)}
                 <path d="M 98 30 Q 112 18 128 24" stroke="#fff" strokeOpacity="0.55" strokeWidth="4" strokeLinecap="round" fill="none" />
@@ -250,15 +254,19 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
             <ellipse cx="137" cy="234" rx="17" ry="9" fill={shoeColor} />
           </g>
 
-          {/* Arms: left relaxed, right waving */}
+          {/* Arms: left relaxed, right waving (the wave pivots at the shoulder) */}
           <g strokeLinecap="round" fill="none">
             <path d="M 92 156 Q 74 170 66 190" stroke={OUTLINE} strokeWidth="20" />
-            <path d="M 148 156 Q 168 146 178 124" stroke={OUTLINE} strokeWidth="20" />
             <path d="M 92 156 Q 74 170 66 190" stroke={sleeveColor} strokeWidth="14" />
-            <path d="M 148 156 Q 168 146 178 124" stroke={sleeveColor} strokeWidth="14" />
           </g>
           <circle cx="64" cy="194" r="10" fill={skinColor} stroke={OUTLINE} strokeWidth="3" />
-          <circle cx="180" cy="120" r="10" fill={skinColor} stroke={OUTLINE} strokeWidth="3" />
+          <g className={calm ? undefined : 'mt-wave'} style={{ transformOrigin: '148px 156px' }}>
+            <g strokeLinecap="round" fill="none">
+              <path d="M 148 156 Q 168 146 178 124" stroke={OUTLINE} strokeWidth="20" />
+              <path d="M 148 156 Q 168 146 178 124" stroke={sleeveColor} strokeWidth="14" />
+            </g>
+            <circle cx="180" cy="120" r="10" fill={skinColor} stroke={OUTLINE} strokeWidth="3" />
+          </g>
 
           {/* Body / outfit */}
           {isBounceSuit ? (
@@ -299,11 +307,11 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
 
           {/* Ears */}
           <g stroke={OUTLINE} strokeWidth="3">
-            <path d="M 80 92 Q 58 78 60 104 Q 66 118 82 110 Z" fill={skinColor} strokeLinejoin="round" />
-            <path d="M 160 92 Q 182 78 180 104 Q 174 118 158 110 Z" fill={skinColor} strokeLinejoin="round" />
+            <ellipse cx="77" cy="104" rx="9" ry="11" fill={skinColor} />
+            <ellipse cx="163" cy="104" rx="9" ry="11" fill={skinColor} />
           </g>
-          <path d="M 76 96 Q 66 92 67 104 Q 70 109 77 106" fill="#fda4af" />
-          <path d="M 164 96 Q 174 92 173 104 Q 170 109 163 106" fill="#fda4af" />
+          <ellipse cx="78" cy="105" rx="4" ry="5.5" fill="#fda4af" />
+          <ellipse cx="162" cy="105" rx="4" ry="5.5" fill="#fda4af" />
 
           {/* Head */}
           <circle cx="120" cy="100" r="44" fill={skinColor} stroke={OUTLINE} strokeWidth="3" />
@@ -331,19 +339,21 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
             </g>
           )}
 
-          {/* Eyes (hidden behind goggles in the racing look) */}
+          {/* Eyes (hidden behind goggles in the racing look); they blink every few seconds */}
           {!isRacingHelmet && (
-            <g>
+            <g className="mt-blink" style={{ transformOrigin: '120px 97px' }}>
               <path d="M 92 82 Q 102 76 112 82" stroke={OUTLINE} strokeWidth="3" strokeLinecap="round" fill="none" />
               <path d="M 128 82 Q 138 76 148 82" stroke={OUTLINE} strokeWidth="3" strokeLinecap="round" fill="none" />
               <ellipse cx="102" cy="97" rx="11" ry="13" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
               <ellipse cx="138" cy="97" rx="11" ry="13" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
-              <circle cx="104" cy="99" r="7" fill={eyeColor} />
-              <circle cx="140" cy="99" r="7" fill={eyeColor} />
-              <circle cx="104" cy="99" r="3.2" fill="#1e1b2e" />
-              <circle cx="140" cy="99" r="3.2" fill="#1e1b2e" />
-              <circle cx="106.5" cy="95.5" r="2.4" fill="#fff" />
-              <circle cx="142.5" cy="95.5" r="2.4" fill="#fff" />
+              <circle cx="103" cy="99" r="9" fill={eyeColor} />
+              <circle cx="139" cy="99" r="9" fill={eyeColor} />
+              <circle cx="103" cy="99" r="5" fill="#1e1b2e" />
+              <circle cx="139" cy="99" r="5" fill="#1e1b2e" />
+              <circle cx="106" cy="95" r="3" fill="#fff" />
+              <circle cx="142" cy="95" r="3" fill="#fff" />
+              <circle cx="100.5" cy="103" r="1.4" fill="#fff" />
+              <circle cx="136.5" cy="103" r="1.4" fill="#fff" />
             </g>
           )}
 
@@ -354,6 +364,7 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
           <path d="M 103 119 L 137 119 Q 136 141 120 141 Q 104 141 103 119 Z" fill="#9f1239" stroke={OUTLINE} strokeWidth="2.5" strokeLinejoin="round" />
           <path d="M 106 120 L 134 120 L 133 124 L 107 124 Z" fill="#fff" />
           <ellipse cx="120" cy="134" rx="9" ry="5" fill="#fb7185" />
+          </g>
         </svg>
       </div>
 
@@ -369,6 +380,19 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
           0% { transform: translateX(-150%) rotate(-3deg); }
           50% { transform: translateX(0%) rotate(0deg); }
           100% { transform: translateX(150%) rotate(3deg); }
+        }
+        /* Idle life: all slow, nothing flashes. Blink about every 4 s, breathe every 3.6 s,
+           wave and hair sway every 2.4 to 4 s. Calm motion turns the wave and sway off. */
+        @keyframes mtBlink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+        @keyframes mtBreathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.018); } }
+        @keyframes mtWave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-14deg); } }
+        @keyframes mtSway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+        .mt-blink { animation: mtBlink 4.2s ease-in-out infinite; }
+        .mt-breathe { animation: mtBreathe 3.6s ease-in-out infinite; }
+        .mt-wave { animation: mtWave 2.4s ease-in-out infinite; }
+        .mt-sway { animation: mtSway 4s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .mt-blink, .mt-breathe, .mt-wave, .mt-sway { animation: none; }
         }
         @keyframes gentleFloat {
           0% { transform: translateY(0px) rotate(0deg); }
