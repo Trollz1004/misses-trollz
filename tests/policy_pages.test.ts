@@ -18,6 +18,8 @@ import { ManifestoPage } from '../src/pages/ManifestoPage';
 import { GovernancePage } from '../src/pages/GovernancePage';
 import { SiteHeader } from '../src/components/site/SiteHeader';
 import { SiteFooter } from '../src/components/site/SiteFooter';
+import { KidTrustLine } from '../src/components/site/KidTrustLine';
+import { mainLine } from '../src/components/KidScreen';
 
 const HANDOFF_CHILD_SAFETY = [
   'Children are not products.',
@@ -91,8 +93,24 @@ test('child safety is linked from the header and the footer on every route', () 
   for (const line of HANDOFF_LEGAL) assert.ok(footer.includes(`>${line}<`), `footer notice missing: ${line}`);
   for (const f of policy.TRUST_FACTS) assert.ok(footer.includes(`>${f.label}<`), `trust fact missing: ${f.label}`);
   const app = fs.readFileSync(path.resolve('src/App.tsx'), 'utf8');
-  assert.equal((app.match(/<SiteHeader /g) || []).length, 2, 'header on the play screen and on the text pages');
-  assert.equal((app.match(/<SiteFooter /g) || []).length, 2, 'footer on the play screen and on the text pages');
+  // Rule one (2026-10-04): the kid screen carries no adult navigation or legal footer.
+  assert.equal((app.match(/<SiteHeader /g) || []).length, 1, 'site header only on the grown-up pages');
+  assert.equal((app.match(/<SiteFooter /g) || []).length, 1, 'site footer only on the grown-up pages');
+  assert.equal((app.match(/<KidTrustLine \/>/g) || []).length, 1, 'one trust line under the kid screen');
+});
+
+test('the kid screen links to child safety in one plain line, and the Grown-Ups panel links all three pages', () => {
+  const line = html(React.createElement(KidTrustLine));
+  assert.ok(line.includes('href="#/child-safety"'));
+  assert.match(line, /Free · No ads · No tracking/);
+  const panel = fs.readFileSync(path.resolve('src/components/CaregiverModal.tsx'), 'utf8');
+  for (const r of ['#/child-safety', '#/manifesto', '#/governance']) assert.ok(panel.includes(`href="${r}"`), `Grown-Ups panel links ${r}`);
+});
+
+test('a tap shows one line to the child: the thing to do, or the greeting', () => {
+  const base = { greeting: 'Hello, friend!', whyItMatters: '', look: '', caregiverLine: 'x', fullText: '', spokenText: '' };
+  assert.equal(mainLine({ ...base, gameBullets: ['• Color hunt: find something blue.', '• Take your time!'] }), 'Color hunt: find something blue.');
+  assert.equal(mainLine({ ...base, gameBullets: [] }), 'Hello, friend!');
 });
 
 test('routes: hash and path forms both resolve, unknown goes to play', () => {

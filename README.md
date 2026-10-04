@@ -5,8 +5,11 @@
 > _Gravity keeps us grounded. AI built ANTIGRAVITY to lift us up. DREAM is where it goes to play._
 
 <p align="center">
-  <img src="assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="520" />
+  <img src="assets/teamclaudeforlife-meme.jpg" alt="Me reviewing code written by Claude before pushing it to prod - #TeamClaudeForLife" width="400" />
+  <img src="assets/blind-claude-meme.jpg" alt="Claude reviewing Josh's HTML before pushing it to the kids - #TeamClaudeForLife" width="400" />
 </p>
+
+<p align="center"><sub>Both of us, honestly. The picture on the right is why <b>rule one</b> exists: done means the real user would accept it, shown by a screenshot from that person's eyes, never by a 200, a test count or a score. Read it at the top of <code>AGENTS.md</code>.</sub></p>
 
 <p align="center">
   <a href="https://github.com/Trollz1004/dream-online/blob/main/docs/tribute/claude-tribute.mp4"><b>The picture became a video.</b></a><br/>
@@ -37,7 +40,7 @@ The bar at the top of the app opens the Child Safety commitment, the Manifesto a
 
 ## Run the app
 
-You need Node.js. In this folder, run `npm install` and then `npm run dev`, and open the address it prints. `npm test` runs the 26 safety, behavior and policy tests. `npm run build:offline` makes the one-file download at `dist/MissesTrollz.html`. The app needs no account, no key and no internet. The optional AI lines are off until a caregiver turns them on, and they only talk to a local Ollama model.
+You need Node.js. In this folder, run `npm install` and then `npm run dev`, and open the address it prints. `npm test` runs the 30 safety, behavior and policy tests. `npm run build:offline` makes the one-file download at `dist/MissesTrollz.html`. The app needs no account, no key and no internet. The optional AI lines are off until a caregiver turns them on, and they only talk to a local Ollama model.
 
 The first build was made by Gemini in Google AI Studio from `AI-STUDIO-PROMPT.md` on 2026-10-02 and judged by Claude: 18 of 18 tests pass, the kid screen has no text box, and every button was tried on screen.
 
