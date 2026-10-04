@@ -152,7 +152,7 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
         </svg>
       </div>
 
-      {/* Trollz's drift cart drives along the ground behind her */}
+      {/* Trollz's drift cart drives past in front of her so a small child sees him */}
       {showDriftCart && (
         <div
           className="absolute bottom-6 left-0 right-0 pointer-events-none z-20"
