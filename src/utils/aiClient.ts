@@ -30,6 +30,24 @@ export interface AIRequestPayload {
   recentIds: string[];
 }
 
+/**
+ * The optional AI line may only reach a model on this same computer. Returns
+ * the parsed URL for an http(s) address on localhost, 127.0.0.1 or [::1], and
+ * null for anything else (a remote server, another scheme, an address that
+ * does not parse), in which case the scripted line is used.
+ */
+export function loopbackEndpoint(raw: string | undefined): URL | null {
+  try {
+    const url = new URL(raw || 'http://localhost:11434/api/generate');
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+    if (url.username || url.password) return null;
+    const host = url.hostname.toLowerCase();
+    return host === 'localhost' || host === '127.0.0.1' || host === '[::1]' ? url : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function requestAILine(
   buttonPressed: 'game' | 'look' | 'trollz' | 'calm',
   settings: CaregiverSettings,
@@ -55,7 +73,8 @@ export async function requestAILine(
   };
 
   try {
-    const endpoint = settings.aiEndpoint || 'http://localhost:11434/api/generate';
+    const endpoint = loopbackEndpoint(settings.aiEndpoint);
+    if (!endpoint) return fallback; // not on this computer: never sent
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 4000); // 4-second timeout for snappy UX
 
@@ -71,6 +90,7 @@ export async function requestAILine(
         stream: false,
       }),
       signal: controller.signal,
+      redirect: 'error', // a local server must not bounce the request elsewhere
     });
     clearTimeout(timeoutId);
 
