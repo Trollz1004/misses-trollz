@@ -31,6 +31,16 @@ interface KidScreenProps {
   onSpeakCurrentLine: () => void;
 }
 
+/**
+ * The one line a child sees after a tap: the thing to do (the first game line),
+ * or the greeting when there is none. The whole reply is still read aloud by the
+ * speaker button, and the caregiver line is always shown under it.
+ */
+export function mainLine(reply: FormattedReply): string {
+  const first = reply.gameBullets.find((b) => b.trim());
+  return first ? first.replace(/^[•\-*]\s*/, '') : reply.greeting;
+}
+
 export const KidScreen: React.FC<KidScreenProps> = ({
   presentation,
   currentLook,
@@ -81,15 +91,14 @@ export const KidScreen: React.FC<KidScreenProps> = ({
   return (
     <div className="flex flex-col min-h-screen bg-amber-50/60 text-slate-900 select-none pb-6">
       {/* Header bar: Title, Caregiver Hold Button, Sound Read Button */}
-      <header className="w-full max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="w-full max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-3xl" role="img" aria-label="Troll emoji">🧌</span>
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-1.5">
               {presentation.name}
             </h1>
             <p className="text-xs text-slate-500 font-semibold">
-              Best friend of Trollz, drift cart driver!
+              Trollz's best friend
             </p>
           </div>
         </div>
@@ -132,7 +141,7 @@ export const KidScreen: React.FC<KidScreenProps> = ({
       </header>
 
       {/* Main Play Area */}
-      <main id="main" className="flex-1 w-full max-w-2xl mx-auto px-4 flex flex-col justify-between gap-4">
+      <main id="main" className="flex-1 w-full max-w-2xl mx-auto px-4 flex flex-col justify-start gap-5">
         {/* Avatar View in the middle */}
         <section aria-label="Cartoon Avatar" className="w-full">
           <AvatarView
@@ -147,45 +156,23 @@ export const KidScreen: React.FC<KidScreenProps> = ({
         <section
           aria-live="polite"
           aria-atomic="true"
-          className="w-full bg-white rounded-3xl p-4 sm:p-5 shadow-lg border-4 border-amber-300 text-center min-h-[140px] flex flex-col justify-center transition-all"
+          className="w-full bg-white rounded-3xl p-4 sm:p-5 shadow-lg border-4 border-amber-300 text-center min-h-[112px] flex flex-col justify-center transition-all"
         >
           {activeReply ? (
-            <div className="space-y-2 text-slate-800">
-              <p className="text-lg sm:text-xl font-black text-indigo-900">
-                {activeReply.greeting}
+            <div className="space-y-2">
+              <p className="text-xl sm:text-2xl font-black text-indigo-900 leading-snug">
+                {mainLine(activeReply)}
               </p>
-              {activeReply.whyItMatters && (
-                <p className="text-sm sm:text-base font-bold text-amber-700">
-                  {activeReply.whyItMatters}
-                </p>
-              )}
-              {activeReply.gameBullets.length > 0 && (
-                <div className="text-left bg-amber-50/70 p-3 rounded-2xl border border-amber-200 my-1 space-y-1">
-                  {activeReply.gameBullets.map((bullet, idx) => (
-                    <p key={idx} className="text-sm sm:text-base font-semibold text-slate-800">
-                      {bullet}
-                    </p>
-                  ))}
-                </div>
-              )}
-              {activeReply.look && (
-                <p className="text-xs sm:text-sm font-semibold text-purple-700 italic">
-                  {activeReply.look}
-                </p>
-              )}
-              <p className="text-xs sm:text-sm font-black text-rose-600 border-t border-slate-100 pt-2">
+              <p className="text-xs sm:text-sm font-bold text-rose-700">
                 {activeReply.caregiverLine}
               </p>
             </div>
           ) : (
-            <div className="space-y-1">
-              <p className="text-lg sm:text-xl font-black text-indigo-900">
-                Hi! Tap a big button below to play with me!
+            <div className="space-y-2">
+              <p className="text-xl sm:text-2xl font-black text-indigo-900 leading-snug">
+                Hi! Tap a big button to play with me!
               </p>
-              <p className="text-sm font-medium text-slate-600">
-                Trollz is coming soon in his drift cart!
-              </p>
-              <p className="text-xs font-bold text-rose-600 pt-2">
+              <p className="text-xs sm:text-sm font-bold text-rose-700">
                 {CAREGIVER_LINE}
               </p>
             </div>

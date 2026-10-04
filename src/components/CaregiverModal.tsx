@@ -92,13 +92,14 @@ export const CaregiverModal: React.FC<CaregiverModalProps> = ({
 
               <div>
                 <input
-                  type="number"
+                  type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   value={mathAnswer}
-                  onChange={(e) => setMathAnswer(e.target.value)}
+                  onChange={(e) => setMathAnswer(e.target.value.replace(/[^0-9]/g, ''))}
                   placeholder="Answer"
-                  className="w-32 text-center text-2xl font-bold py-2.5 px-4 border-2 border-slate-300 rounded-xl focus:border-indigo-500 focus:outline-none"
+                  aria-label="Answer"
+                  className="w-44 text-center text-2xl font-bold py-2.5 px-4 border-2 border-slate-300 rounded-xl focus:border-indigo-500 focus:outline-none"
                   autoFocus
                 />
               </div>
@@ -310,6 +311,12 @@ export const CaregiverModal: React.FC<CaregiverModalProps> = ({
                   View Credits
                 </button>
               </div>
+
+              <nav aria-label="Project pages" className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-2 text-xs font-semibold">
+                <a href="#/child-safety" className="text-indigo-700 underline underline-offset-2">Child Safety</a>
+                <a href="#/manifesto" className="text-indigo-700 underline underline-offset-2">Manifesto</a>
+                <a href="#/governance" className="text-indigo-700 underline underline-offset-2">Governance</a>
+              </nav>
             </div>
           </div>
         )}

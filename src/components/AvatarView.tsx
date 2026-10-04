@@ -11,6 +11,7 @@
 import React, { useEffect, useState } from 'react';
 import { CaregiverSettings, LookEntry, PresentationEntry } from '../types';
 import { createAnimationLoop } from '../utils/animationLoop';
+import { DriftCart } from './DriftCart';
 
 interface AvatarViewProps {
   currentLook: LookEntry;
@@ -18,6 +19,25 @@ interface AvatarViewProps {
   settings: CaregiverSettings;
   isDriftCartActive?: boolean;
   onSlotChange?: (slotIndex: number) => void;
+}
+
+/** One outline colour for every shape, so she reads as one drawn character. */
+const OUTLINE = '#3f2a3d';
+/** Big fluffy troll-doll hair: overlapping puffs above the head. */
+const PUFF: ReadonlyArray<readonly [number, number, number]> = [
+  [120, 34, 30], [92, 50, 24], [148, 50, 24], [100, 26, 20], [140, 26, 20], [120, 14, 18], [80, 70, 16], [160, 70, 16],
+];
+/** look-001: hair sprayed straight up. */
+const SPIKE = 'M 84 76 Q 92 40 104 30 Q 108 12 116 2 Q 122 14 126 2 Q 134 14 136 30 Q 148 40 156 76 Z';
+
+function starPath(cx: number, cy: number, r: number): string {
+  const pts: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const a = (Math.PI / 5) * i - Math.PI / 2;
+    const rr = i % 2 ? r * 0.45 : r;
+    pts.push(`${(cx + rr * Math.cos(a)).toFixed(1)},${(cy + rr * Math.sin(a)).toFixed(1)}`);
+  }
+  return `M ${pts.join(' L ')} Z`;
 }
 
 export const AvatarView: React.FC<AvatarViewProps> = ({
@@ -70,9 +90,10 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
   const isCrew = presentation.id === 'pres-003';
 
   // Hair color: Magenta for Misses, Electric Teal for Mister, Sunset Gold for Crew
-  const hairColor = isMister ? '#06b6d4' : isCrew ? '#f59e0b' : '#ec4899';
-  const skinColor = '#fed7aa'; // Warm peach troll skin
-  const noseColor = '#fb923c'; // Cheerful orange troll button nose
+  const hairColor = isMister ? '#22d3ee' : isCrew ? '#fbbf24' : '#f472b6';
+  const skinColor = '#ffd7b0'; // warm peach troll skin
+  const noseColor = '#f9a27a'; // round button nose
+  const eyeColor = isMister ? '#0e7490' : isCrew ? '#92400e' : '#7c3aed';
 
   // Motion styling based on slot and calm motion
   const isSlow = currentSlot.isSlow;
@@ -104,9 +125,15 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
   const isConfetti = currentLook.id === 'look-009';
   const showDriftCart = isDriftCartActive || currentLook.id === 'look-010';
 
+  const baseOutfit = isMister ? '#38bdf8' : isCrew ? '#34d399' : '#a78bfa';
+  const outfitColor = isRainbowHoodie ? '#f43f5e' : isRacingHelmet ? '#ef4444' : baseOutfit;
+  const sleeveColor = isBounceSuit ? '#facc15' : outfitColor;
+  const legColor = isRacingHelmet ? '#ef4444' : '#6d5ba8';
+  const shoeColor = isRacingHelmet ? '#1f2937' : '#f43f5e';
+
   return (
     <div
-      className="relative w-full max-w-md h-80 sm:h-96 mx-auto flex items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-b from-sky-100 via-indigo-50 to-amber-50 border-4 border-amber-300 shadow-inner"
+      className="relative w-full max-w-xl h-80 sm:h-[26rem] md:h-[30rem] mx-auto flex items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-b from-sky-100 via-indigo-50 to-amber-50 border-4 border-amber-300 shadow-inner"
       role="img"
       aria-label={`Cartoon avatar of ${presentation.name}. Current look: ${currentLook.spoken}`}
     >
@@ -122,27 +149,21 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
         </svg>
       </div>
 
-      {/* Drift cart zooming past in background (Easter egg #1004 & 4THEKIDS) */}
+      {/* Trollz's drift cart drives along the ground behind her */}
       {showDriftCart && (
         <div
-          className="absolute top-12 left-0 right-0 pointer-events-none z-10 transition-transform duration-1000 ease-out"
-          style={{
-            animation: 'driftZoom 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
-          }}
+          className="absolute bottom-6 left-0 right-0 pointer-events-none z-20"
+          style={{ animation: 'driftZoom 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards' }}
         >
-          <div className="flex items-center space-x-2 bg-gradient-to-r from-red-500 to-amber-500 text-white px-3 py-1.5 rounded-full shadow-lg border-2 border-yellow-300 w-max mx-auto">
-            <span className="text-xl">🏎️</span>
-            <div className="text-xs font-black tracking-wider uppercase">
-              Trollz #1004 • <span className="bg-yellow-400 text-black px-1.5 py-0.5 rounded font-mono">4THEKIDS</span>
-            </div>
-            <span className="text-xs font-semibold animate-pulse">Vroom! 💨</span>
+          <div className="w-max mx-auto">
+            <DriftCart />
           </div>
         </div>
       )}
 
       {/* Gentle floating confetti (look-009) - strictly <= 1 Hz, no flashing */}
       {isConfetti && (
-        <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           {[...Array(12)].map((_, i) => (
             <div
               key={i}
@@ -175,177 +196,164 @@ export const AvatarView: React.FC<AvatarViewProps> = ({
       >
         <svg
           viewBox="0 0 240 260"
-          className="w-56 h-64 sm:w-64 sm:h-72 drop-shadow-md select-none"
+          className="w-56 h-64 sm:w-72 sm:h-80 md:w-80 md:h-[22rem] drop-shadow-md select-none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Cape behind body */}
+          <defs>
+            <clipPath id="mt-torso">
+              <path d="M 86 146 Q 120 134 154 146 L 163 206 Q 120 216 77 206 Z" />
+            </clipPath>
+          </defs>
+
+          {/* Cape behind everything (looks 005 and 008) */}
           {isStarCape && (
-            <g className="transition-all duration-500">
-              <path
-                d="M 60 130 Q 30 220 50 250 Q 120 260 190 250 Q 210 220 180 130 Z"
-                fill="#4338ca"
-              />
-              {/* Gold stars on cape */}
-              <circle cx="80" cy="200" r="4" fill="#fbbf24" />
-              <circle cx="120" cy="225" r="5" fill="#fbbf24" />
-              <circle cx="160" cy="195" r="4" fill="#fbbf24" />
-              <circle cx="100" cy="170" r="3" fill="#fbbf24" />
-              <circle cx="140" cy="165" r="3" fill="#fbbf24" />
-            </g>
-          )}
-
-          {/* Floppy Elephant-Ear Hat (look-003) */}
-          {isElephantHat && (
-            <g className="animate-pulse">
-              {/* Left floppy ear */}
-              <ellipse cx="40" cy="65" rx="38" ry="46" fill="#94a3b8" />
-              <ellipse cx="42" cy="65" rx="26" ry="34" fill="#cbd5e1" />
-              {/* Right floppy ear */}
-              <ellipse cx="200" cy="65" rx="38" ry="46" fill="#94a3b8" />
-              <ellipse cx="198" cy="65" rx="26" ry="34" fill="#cbd5e1" />
-              {/* Hat dome */}
-              <path d="M 60 65 Q 120 20 180 65 Z" fill="#64748b" />
-            </g>
-          )}
-
-          {/* Hair styles */}
-          {!isElephantHat && !isRacingHelmet && (
-            <g className="transition-all duration-500">
-              {isStraightHair ? (
-                /* look-001: Hair sprayed straight up like a troll doll */
-                <path
-                  d="M 75 75 Q 120 -30 165 75 Q 140 15 120 -15 Q 100 15 75 75 Z"
-                  fill={hairColor}
-                  className="animate-bounce"
-                  style={{ animationDuration: '2s' }}
-                />
-              ) : (
-                /* Standard cheerful bouncy troll hair tuft */
-                <path
-                  d="M 75 70 Q 120 5 165 70 Q 185 35 155 15 Q 120 25 85 15 Q 55 35 75 70 Z"
-                  fill={hairColor}
-                />
-              )}
-              {/* Hair highlight */}
-              <path
-                d="M 105 35 Q 120 15 135 35"
-                stroke="#fff"
-                strokeWidth="3"
-                strokeLinecap="round"
-                fill="none"
-                opacity="0.6"
-              />
-            </g>
-          )}
-
-          {/* Racing Helmet & Goggles (look-007) */}
-          {isRacingHelmet && (
             <g>
-              {/* Helmet shell */}
-              <path
-                d="M 60 75 Q 120 10 180 75 Q 180 95 170 105 Q 120 115 70 105 Z"
-                fill="#ef4444"
-              />
-              <path d="M 100 15 L 140 15 L 130 60 L 110 60 Z" fill="#ffffff" />
-              {/* Goggles band */}
-              <rect x="58" y="72" width="124" height="12" rx="4" fill="#1e293b" />
-              {/* Goggles lenses */}
-              <rect x="80" y="66" width="34" height="22" rx="6" fill="#38bdf8" stroke="#0f172a" strokeWidth="3" />
-              <rect x="126" y="66" width="34" height="22" rx="6" fill="#38bdf8" stroke="#0f172a" strokeWidth="3" />
+              <path d="M 84 148 Q 44 214 58 246 Q 120 258 182 246 Q 196 214 156 148 Z" fill="#4338ca" stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
+              {[[82, 214], [120, 236], [158, 212], [100, 190], [142, 186]].map(([x, y]) => (
+                <path key={`${x}-${y}`} d={starPath(x, y, 6)} fill="#fde047" />
+              ))}
             </g>
           )}
 
-          {/* Troll Big Ears */}
-          <g>
-            <ellipse cx="65" cy="85" rx="14" ry="10" fill={skinColor} />
-            <ellipse cx="65" cy="85" rx="8" ry="6" fill="#fca5a5" />
-            <ellipse cx="175" cy="85" rx="14" ry="10" fill={skinColor} />
-            <ellipse cx="175" cy="85" rx="8" ry="6" fill="#fca5a5" />
+          {/* Hair behind the head: big fluffy troll-doll hair */}
+          {!isElephantHat && !isRacingHelmet && (
+            isStraightHair ? (
+              <g>
+                <path d={SPIKE} fill={OUTLINE} stroke={OUTLINE} strokeWidth="7" strokeLinejoin="round" />
+                <path d={SPIKE} fill={hairColor} />
+                <path d="M 112 52 Q 118 22 122 6" stroke="#fff" strokeOpacity="0.55" strokeWidth="4" strokeLinecap="round" fill="none" />
+              </g>
+            ) : (
+              <g>
+                {PUFF.map(([x, y, r]) => <circle key={`o${x}-${y}`} cx={x} cy={y} r={r + 3} fill={OUTLINE} />)}
+                {PUFF.map(([x, y, r]) => <circle key={`f${x}-${y}`} cx={x} cy={y} r={r} fill={hairColor} />)}
+                <path d="M 98 30 Q 112 18 128 24" stroke="#fff" strokeOpacity="0.55" strokeWidth="4" strokeLinecap="round" fill="none" />
+              </g>
+            )
+          )}
+
+          {/* Elephant-ear hat (look-003): ears behind the head */}
+          {isElephantHat && (
+            <g>
+              <ellipse cx="54" cy="92" rx="34" ry="42" fill="#94a3b8" stroke={OUTLINE} strokeWidth="3" />
+              <ellipse cx="58" cy="94" rx="21" ry="29" fill="#e2e8f0" />
+              <ellipse cx="186" cy="92" rx="34" ry="42" fill="#94a3b8" stroke={OUTLINE} strokeWidth="3" />
+              <ellipse cx="182" cy="94" rx="21" ry="29" fill="#e2e8f0" />
+            </g>
+          )}
+
+          {/* Legs and shoes */}
+          <g stroke={OUTLINE} strokeWidth="3">
+            <rect x="96" y="200" width="18" height="30" rx="8" fill={legColor} />
+            <rect x="126" y="200" width="18" height="30" rx="8" fill={legColor} />
+            <ellipse cx="103" cy="234" rx="17" ry="9" fill={shoeColor} />
+            <ellipse cx="137" cy="234" rx="17" ry="9" fill={shoeColor} />
           </g>
 
-          {/* Face */}
-          <circle cx="120" cy="88" r="44" fill={skinColor} />
+          {/* Arms: left relaxed, right waving */}
+          <g strokeLinecap="round" fill="none">
+            <path d="M 92 156 Q 74 170 66 190" stroke={OUTLINE} strokeWidth="20" />
+            <path d="M 148 156 Q 168 146 178 124" stroke={OUTLINE} strokeWidth="20" />
+            <path d="M 92 156 Q 74 170 66 190" stroke={sleeveColor} strokeWidth="14" />
+            <path d="M 148 156 Q 168 146 178 124" stroke={sleeveColor} strokeWidth="14" />
+          </g>
+          <circle cx="64" cy="194" r="10" fill={skinColor} stroke={OUTLINE} strokeWidth="3" />
+          <circle cx="180" cy="120" r="10" fill={skinColor} stroke={OUTLINE} strokeWidth="3" />
 
-          {/* Cheeks */}
-          <ellipse cx="95" cy="98" rx="8" ry="5" fill="#f87171" opacity="0.5" />
-          <ellipse cx="145" cy="98" rx="8" ry="5" fill="#f87171" opacity="0.5" />
-
-          {/* Eyes */}
-          <ellipse cx="102" cy="82" rx="7" ry="9" fill="#1e293b" />
-          <ellipse cx="138" cy="82" rx="7" ry="9" fill="#1e293b" />
-          {/* Eye catchlights */}
-          <circle cx="104" cy="79" r="2.5" fill="#ffffff" />
-          <circle cx="140" cy="79" r="2.5" fill="#ffffff" />
-
-          {/* Troll Button Nose */}
-          <ellipse cx="120" cy="92" rx="9" ry="7" fill={noseColor} />
-
-          {/* Warm Friendly Smile */}
-          <path
-            d="M 106 104 Q 120 120 134 104"
-            stroke="#991b1b"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            fill="none"
-          />
-
-          {/* Body / Outfits */}
+          {/* Body / outfit */}
           {isBounceSuit ? (
-            /* look-002: Puffy inflatable crash suit with bouncy valves */
-            <g className="transition-all duration-300">
-              <ellipse cx="120" cy="180" rx="68" ry="60" fill="#facc15" stroke="#ca8a04" strokeWidth="5" />
-              {/* Suit air segments */}
-              <path d="M 65 170 Q 120 155 175 170" stroke="#ca8a04" strokeWidth="3" fill="none" />
-              <path d="M 68 195 Q 120 180 172 195" stroke="#ca8a04" strokeWidth="3" fill="none" />
-              {/* Air valve badge */}
-              <circle cx="120" cy="175" r="14" fill="#38bdf8" stroke="#0284c7" strokeWidth="3" />
-              <text x="120" y="179" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">
-                BOING
-              </text>
-            </g>
-          ) : isRainbowHoodie ? (
-            /* look-006: Rainbow hoodie with friendly patches */
             <g>
-              <path
-                d="M 80 130 L 60 215 L 180 215 L 160 130 Z"
-                fill="#f43f5e"
-              />
-              <path d="M 75 155 L 165 155 L 168 175 L 72 175 Z" fill="#fbbf24" />
-              <path d="M 70 175 L 170 175 L 173 195 L 67 195 Z" fill="#34d399" />
-              <path d="M 67 195 L 173 195 L 176 215 L 64 215 Z" fill="#38bdf8" />
-              {/* Star patch */}
-              <polygon points="120,138 123,144 130,144 125,148 127,154 120,150 113,154 115,148 110,144 117,144" fill="#ffffff" />
-            </g>
-          ) : isRacingHelmet ? (
-            /* Racing outfit */
-            <g>
-              <path d="M 82 130 L 65 220 L 175 220 L 158 130 Z" fill="#dc2626" />
-              {/* Checker stripe */}
-              <rect x="110" y="130" width="20" height="90" fill="#ffffff" />
-              <rect x="110" y="145" width="10" height="15" fill="#000000" />
-              <rect x="120" y="160" width="10" height="15" fill="#000000" />
-              <rect x="110" y="175" width="10" height="15" fill="#000000" />
-              <rect x="120" y="190" width="10" height="15" fill="#000000" />
+              <ellipse cx="120" cy="180" rx="60" ry="44" fill="#facc15" stroke={OUTLINE} strokeWidth="3" />
+              <path d="M 66 168 Q 120 152 174 168" stroke="#ca8a04" strokeWidth="3" fill="none" />
+              <path d="M 64 192 Q 120 176 176 192" stroke="#ca8a04" strokeWidth="3" fill="none" />
+              <text x="120" y="186" textAnchor="middle" fontSize="15" fontWeight="900" fill={OUTLINE} fontFamily="Arial, sans-serif">BOING!</text>
             </g>
           ) : (
-            /* Cheerful friendly jumper */
             <g>
-              <path
-                d="M 85 130 L 68 220 L 172 220 L 155 130 Z"
-                fill={isMister ? '#0284c7' : isCrew ? '#059669' : '#a855f7'}
-              />
-              <circle cx="120" cy="165" r="16" fill="#ffffff" opacity="0.9" />
-              {/* Friendly heart or flower icon on chest */}
-              <path
-                d="M 120 160 Q 120 156 116 156 Q 112 156 112 160 Q 112 165 120 171 Q 128 165 128 160 Q 128 156 124 156 Q 120 156 120 160 Z"
-                fill="#f43f5e"
-              />
+              <path d="M 86 146 Q 120 134 154 146 L 163 206 Q 120 216 77 206 Z" fill={outfitColor} />
+              {isRainbowHoodie && (
+                <g clipPath="url(#mt-torso)">
+                  <rect x="60" y="164" width="120" height="14" fill="#fbbf24" />
+                  <rect x="60" y="178" width="120" height="14" fill="#34d399" />
+                  <rect x="60" y="192" width="120" height="24" fill="#38bdf8" />
+                </g>
+              )}
+              {isRacingHelmet && (
+                <g clipPath="url(#mt-torso)">
+                  <rect x="111" y="130" width="18" height="90" fill="#fff" />
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <rect key={i} x={i % 2 ? 120 : 111} y={146 + i * 13} width="9" height="13" fill={OUTLINE} />
+                  ))}
+                </g>
+              )}
+              <path d="M 86 146 Q 120 134 154 146 L 163 206 Q 120 216 77 206 Z" fill="none" stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
+              {!isRainbowHoodie && !isRacingHelmet && (
+                <g>
+                  <circle cx="120" cy="174" r="15" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
+                  <path d="M 120 170 Q 120 165 115.5 165 Q 111 165 111 170 Q 111 175 120 182 Q 129 175 129 170 Q 129 165 124.5 165 Q 120 165 120 170 Z" fill="#f43f5e" />
+                </g>
+              )}
+              {isRainbowHoodie && <path d={starPath(120, 156, 7)} fill="#fff" stroke={OUTLINE} strokeWidth="1.5" />}
             </g>
           )}
 
-          {/* Friendly Waving Hands */}
-          <circle cx="58" cy="180" r="12" fill={skinColor} />
-          <circle cx="182" cy="180" r="12" fill={skinColor} />
+          {/* Ears */}
+          <g stroke={OUTLINE} strokeWidth="3">
+            <path d="M 80 92 Q 58 78 60 104 Q 66 118 82 110 Z" fill={skinColor} strokeLinejoin="round" />
+            <path d="M 160 92 Q 182 78 180 104 Q 174 118 158 110 Z" fill={skinColor} strokeLinejoin="round" />
+          </g>
+          <path d="M 76 96 Q 66 92 67 104 Q 70 109 77 106" fill="#fda4af" />
+          <path d="M 164 96 Q 174 92 173 104 Q 170 109 163 106" fill="#fda4af" />
+
+          {/* Head */}
+          <circle cx="120" cy="100" r="44" fill={skinColor} stroke={OUTLINE} strokeWidth="3" />
+
+          {/* Fringe over the forehead (hair looks only) */}
+          {!isElephantHat && !isRacingHelmet && (
+            <path d="M 88 72 Q 96 56 108 66 Q 114 52 124 64 Q 134 52 142 66 Q 150 58 152 72 Q 140 64 132 70 Q 124 62 116 70 Q 106 62 98 70 Q 92 66 88 72 Z" fill={hairColor} stroke={OUTLINE} strokeWidth="2.5" strokeLinejoin="round" />
+          )}
+
+          {/* Elephant-ear hat dome */}
+          {isElephantHat && (
+            <path d="M 78 84 Q 120 30 162 84 Q 120 72 78 84 Z" fill="#64748b" stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
+          )}
+
+          {/* Racing helmet and goggles (look-007) */}
+          {isRacingHelmet && (
+            <g>
+              <path d="M 74 92 Q 74 42 120 42 Q 166 42 166 92 Z" fill="#ef4444" stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />
+              <path d="M 112 43 L 128 43 L 126 90 L 114 90 Z" fill="#fff" />
+              <rect x="74" y="80" width="92" height="9" rx="4" fill={OUTLINE} />
+              <rect x="86" y="74" width="30" height="20" rx="8" fill="#7dd3fc" stroke={OUTLINE} strokeWidth="3" />
+              <rect x="124" y="74" width="30" height="20" rx="8" fill="#7dd3fc" stroke={OUTLINE} strokeWidth="3" />
+              <path d="M 92 80 L 100 80" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 130 80 L 138 80" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+            </g>
+          )}
+
+          {/* Eyes (hidden behind goggles in the racing look) */}
+          {!isRacingHelmet && (
+            <g>
+              <path d="M 92 82 Q 102 76 112 82" stroke={OUTLINE} strokeWidth="3" strokeLinecap="round" fill="none" />
+              <path d="M 128 82 Q 138 76 148 82" stroke={OUTLINE} strokeWidth="3" strokeLinecap="round" fill="none" />
+              <ellipse cx="102" cy="97" rx="11" ry="13" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
+              <ellipse cx="138" cy="97" rx="11" ry="13" fill="#fff" stroke={OUTLINE} strokeWidth="2.5" />
+              <circle cx="104" cy="99" r="7" fill={eyeColor} />
+              <circle cx="140" cy="99" r="7" fill={eyeColor} />
+              <circle cx="104" cy="99" r="3.2" fill="#1e1b2e" />
+              <circle cx="140" cy="99" r="3.2" fill="#1e1b2e" />
+              <circle cx="106.5" cy="95.5" r="2.4" fill="#fff" />
+              <circle cx="142.5" cy="95.5" r="2.4" fill="#fff" />
+            </g>
+          )}
+
+          {/* Cheeks, nose, smile */}
+          <ellipse cx="90" cy="116" rx="8" ry="5" fill="#fb7185" opacity="0.45" />
+          <ellipse cx="150" cy="116" rx="8" ry="5" fill="#fb7185" opacity="0.45" />
+          <ellipse cx="120" cy="112" rx="7.5" ry="6" fill={noseColor} stroke={OUTLINE} strokeWidth="2" />
+          <path d="M 103 119 L 137 119 Q 136 141 120 141 Q 104 141 103 119 Z" fill="#9f1239" stroke={OUTLINE} strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M 106 120 L 134 120 L 133 124 L 107 124 Z" fill="#fff" />
+          <ellipse cx="120" cy="134" rx="9" ry="5" fill="#fb7185" />
         </svg>
       </div>
 
