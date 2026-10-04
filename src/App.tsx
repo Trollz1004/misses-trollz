@@ -11,6 +11,12 @@ import { KidScreen } from './components/KidScreen';
 import { CaregiverModal } from './components/CaregiverModal';
 import { CreditsModal } from './components/CreditsModal';
 import { GrownUpNeededModal } from './components/GrownUpNeededModal';
+import { SiteHeader } from './components/site/SiteHeader';
+import { SiteFooter } from './components/site/SiteFooter';
+import { ManifestoPage } from './pages/ManifestoPage';
+import { GovernancePage } from './pages/GovernancePage';
+import { ChildSafetyPage } from './pages/ChildSafetyPage';
+import { titleOf, useRoute } from './router';
 
 const SETTINGS_STORAGE_KEY = 'misses_trollz_settings_v1';
 const ROTATION_STORAGE_KEY = 'misses_trollz_rotation_v1';
@@ -27,6 +33,13 @@ const DEFAULT_SETTINGS: CaregiverSettings = {
 };
 
 export default function App() {
+  const route = useRoute();
+
+  useEffect(() => {
+    document.title = titleOf(route);
+    if (route !== 'play') stopSpeaking();
+  }, [route]);
+
   // Load settings from localStorage
   const [settings, setSettings] = useState<CaregiverSettings>(() => {
     try {
@@ -139,8 +152,21 @@ export default function App() {
     }
   };
 
+  if (route !== 'play') {
+    return (
+      <div className="min-h-screen bg-slate-950 font-sans flex flex-col">
+        <SiteHeader route={route} />
+        {route === 'manifesto' && <ManifestoPage />}
+        {route === 'governance' && <GovernancePage />}
+        {route === 'child-safety' && <ChildSafetyPage />}
+        <SiteFooter />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
+      <SiteHeader route={route} />
       <KidScreen
         presentation={presentation}
         currentLook={currentLook}
@@ -155,6 +181,8 @@ export default function App() {
         onOpenCaregiver={() => setIsCaregiverOpen(true)}
         onSpeakCurrentLine={handleSpeakCurrent}
       />
+
+      <SiteFooter />
 
       {/* Caregiver Settings Modal */}
       <CaregiverModal

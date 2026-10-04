@@ -19,6 +19,16 @@
 
 She needs no account, collects no data and works offline. She is a cartoon and says so. She is never romantic, never gives medical advice and never asks a kid who they are.
 
+## Download
+
+1. **Download** [MissesTrollz.html](https://github.com/Trollz1004/misses-trollz/releases/download/offline/MissesTrollz.html)
+2. **Double click** the file.
+3. **Misses Trollz opens** in your web browser.
+
+One file, nothing to install, no account, no internet needed. It is rebuilt from `main` after every reviewed change. If the browser asks what to do with the file, choose Keep or Open.
+
+The bar at the top of the app opens the Child Safety commitment, the Manifesto and the Governance page. Their exact wording lives in `src/constants/policy.ts` and is checked by the tests.
+
 ## What is here
 
 - `MISSES-TROLLZ-BUILD.md`: the whole build brief: story, rules, app spec, tests and banks. Give it to any builder (Gemini in AI Studio, Claude, Hermes, a person).
@@ -27,7 +37,7 @@ She needs no account, collects no data and works offline. She is a cartoon and s
 
 ## Run the app
 
-You need Node.js. In this folder, run `npm install` and then `npm run dev`, and open the address it prints. `npm test` runs the 18 safety and behavior tests. The app needs no account, no key and no internet. The optional AI lines are off until a caregiver turns them on, and they only talk to a local Ollama model.
+You need Node.js. In this folder, run `npm install` and then `npm run dev`, and open the address it prints. `npm test` runs the 26 safety, behavior and policy tests. `npm run build:offline` makes the one-file download at `dist/MissesTrollz.html`. The app needs no account, no key and no internet. The optional AI lines are off until a caregiver turns them on, and they only talk to a local Ollama model.
 
 The first build was made by Gemini in Google AI Studio from `AI-STUDIO-PROMPT.md` on 2026-10-02 and judged by Claude: 18 of 18 tests pass, the kid screen has no text box, and every button was tried on screen.
 

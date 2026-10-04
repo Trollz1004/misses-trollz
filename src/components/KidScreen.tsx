@@ -132,7 +132,7 @@ export const KidScreen: React.FC<KidScreenProps> = ({
       </header>
 
       {/* Main Play Area */}
-      <main className="flex-1 w-full max-w-2xl mx-auto px-4 flex flex-col justify-between gap-4">
+      <main id="main" className="flex-1 w-full max-w-2xl mx-auto px-4 flex flex-col justify-between gap-4">
         {/* Avatar View in the middle */}
         <section aria-label="Cartoon Avatar" className="w-full">
           <AvatarView

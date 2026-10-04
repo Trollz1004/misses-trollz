@@ -1,0 +1,37 @@
+name: Download file
+# Builds the one-file app (dist/MissesTrollz.html) on every merge to main and
+# attaches it to the "offline" release, so this link always serves the newest
+# reviewed build:
+#   https://github.com/Trollz1004/misses-trollz/releases/download/offline/MissesTrollz.html
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: download-file
+  cancel-in-progress: false
+jobs:
+  publish:
+    name: Publish the one-file download
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - run: npm ci
+      - name: Tests must pass before anything is published
+        run: npm test
+      - run: npm run build:offline
+      - name: Attach to the offline release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view offline >/dev/null 2>&1; then
+            gh release create offline --target "$GITHUB_SHA" --latest \
+              --title "Misses Trollz: download and double click" \
+              --notes "Download MissesTrollz.html, double click it, and Misses Trollz opens in your web browser. No install, no account, no internet. This file is rebuilt from main after every reviewed change."
+          fi
+          gh release upload offline dist/MissesTrollz.html --clobber
