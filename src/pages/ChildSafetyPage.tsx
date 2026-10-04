@@ -27,7 +27,7 @@ export const ChildSafetyPage: React.FC = () => (
       <ul className="list-disc space-y-2 pl-6">
         <li>The kid screen has big buttons only. There is no text box, so a child is never asked to type anything.</li>
         <li>The avatar never asks for a name, age, school, room or bed number, or why someone is in hospital.</li>
-        <li>Everything she says comes from approved word banks, and every line is checked against a blocked-word list before it is shown.</li>
+        <li>Her scripted lines come from approved word banks. If the optional AI lines are turned on, each AI reply must carry the caregiver line, stay at 120 words or fewer and pass the blocked-word and personal-question checks, or a scripted line is shown instead.</li>
         <li>A "Grown-up needed" button stops the game and shows: If anyone needs help, please tell a nurse or caregiver right away.</li>
         <li>Settings sit behind a button a grown-up must hold for three seconds.</li>
         <li>Sound and the optional AI lines are off until a grown-up turns them on. The AI lines only talk to a model on the same computer.</li>

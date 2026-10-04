@@ -8,6 +8,15 @@ export const SiteHeader: React.FC<{ route: Route }> = ({ route }) => (
   <header className="w-full bg-slate-950 text-slate-100 border-b border-slate-800">
     <a
       href="#main"
+      onClick={(e) => {
+        // Move focus without touching the address: "#main" is not a route.
+        e.preventDefault();
+        const main = document.getElementById('main');
+        if (main) {
+          if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+          main.focus();
+        }
+      }}
       className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-lg focus:bg-amber-300 focus:px-3 focus:py-2 focus:font-bold focus:text-slate-950"
     >
       Skip to content
