@@ -141,7 +141,7 @@ export const KidScreen: React.FC<KidScreenProps> = ({
       </header>
 
       {/* Main Play Area */}
-      <main id="main" className="flex-1 w-full max-w-2xl mx-auto px-4 flex flex-col justify-start gap-5">
+      <main id="main" className="flex-1 w-full max-w-2xl mx-auto px-4 flex flex-col justify-center-safe gap-5 py-2">
         {/* Avatar View in the middle */}
         <section aria-label="Cartoon Avatar" className="w-full">
           <AvatarView
@@ -163,7 +163,7 @@ export const KidScreen: React.FC<KidScreenProps> = ({
               <p className="text-xl sm:text-2xl font-black text-indigo-900 leading-snug">
                 {mainLine(activeReply)}
               </p>
-              <p className="text-xs sm:text-sm font-bold text-rose-700">
+              <p className="text-xs sm:text-sm font-semibold text-slate-600">
                 {activeReply.caregiverLine}
               </p>
             </div>
@@ -172,7 +172,7 @@ export const KidScreen: React.FC<KidScreenProps> = ({
               <p className="text-xl sm:text-2xl font-black text-indigo-900 leading-snug">
                 Hi! Tap a big button to play with me!
               </p>
-              <p className="text-xs sm:text-sm font-bold text-rose-700">
+              <p className="text-xs sm:text-sm font-semibold text-slate-600">
                 {CAREGIVER_LINE}
               </p>
             </div>
@@ -227,10 +227,10 @@ export const KidScreen: React.FC<KidScreenProps> = ({
           <button
             type="button"
             onClick={onGrownUpNeeded}
-            className="w-full py-3.5 px-4 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-sm sm:text-base border-2 border-rose-300 shadow-sm transition-all flex items-center justify-center gap-2 active:scale-98 focus:outline-none focus:ring-4 focus:ring-rose-300"
+            className="w-full py-4 px-4 rounded-3xl bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-black text-lg sm:text-xl shadow-lg border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center gap-2.5 focus:outline-none focus:ring-4 focus:ring-rose-300"
             aria-label="Grown-up needed: stop the game and call for help"
           >
-            <Bell className="w-5 h-5 text-rose-600 animate-bounce" />
+            <Bell className="w-7 h-7 sm:w-8 sm:h-8 animate-bounce" />
             <span>Grown-up needed</span>
           </button>
         </div>
