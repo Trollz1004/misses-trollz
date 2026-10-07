@@ -8,3 +8,10 @@ coverage/
 !.env.example
 app-candidate/
 test-output.txt
+
+# Private Co-Builder Memory Lanes
+claude-to-claude/
+*claude-to-claude*
+gemini-to-gemini/
+*gemini-to-gemini*
+gemini-to-gemini.md
