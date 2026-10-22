@@ -26,6 +26,14 @@ Look at my style: Sparkly cape with cartoon stars.`;
   assert.match(result.reason || '', /Missing exact caregiver line/i);
 });
 
+test('reply checker rejects a caregiver line that is not at the end', () => {
+  const lineThenMore = `Hello friend! ${CAREGIVER_LINE} Let us play again soon!`;
+  const result = checkReply(lineThenMore);
+  assert.equal(result.valid, false);
+  assert.match(result.reason || '', /Missing exact caregiver line/i);
+  assert.equal(checkReply(`${validBaseReply}\n  `).valid, true, 'trailing spaces after the line are fine');
+});
+
 test('reply checker rejects non-bank id in text or referencedIds', () => {
   const nonBankIdInText = `Hello friend! Let's play game act-999 right now!
 ${CAREGIVER_LINE}`;

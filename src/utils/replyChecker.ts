@@ -36,8 +36,8 @@ export function checkReply(
     return { valid: false, reason: 'Reply is empty or not a string.' };
   }
 
-  // 1. Caregiver line check: must include the exact sentence word for word
-  if (!text.includes(options?.caregiverLine ?? CAREGIVER_LINE)) {
+  // 1. Caregiver line check: the reply must end with the exact sentence, word for word (SAFETY.md)
+  if (!text.trimEnd().endsWith(options?.caregiverLine ?? CAREGIVER_LINE)) {
     return { valid: false, reason: 'Missing exact caregiver line.' };
   }
 
