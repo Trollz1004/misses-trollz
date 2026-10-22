@@ -10,7 +10,8 @@ import path from 'node:path';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import pupclaw from '../approved_banks/pupclaw.json';
-import { BLOCKED_WORDS, CAREGIVER_LINE, PERSONAL_DATA_PATTERNS } from '../src/constants/safety';
+import { BLOCKED_WORDS, CAREGIVER_LINE, PERSONAL_DATA_PATTERNS, PUPCLAW_HELP_LINE } from '../src/constants/safety';
+import { GrownUpNeededModal } from '../src/components/GrownUpNeededModal';
 import {
   ADVENTURES,
   BANDS,
@@ -109,8 +110,9 @@ test("every answer Pupclaw gives ends with the caregiver line and passes the rep
     assert.ok(chips.length >= 4, `${band} has questions to tap`);
     for (const c of chips) {
       const reply = askReply(c.a);
-      assert.ok(reply.endsWith(CAREGIVER_LINE), `${c.q} ends with the caregiver line`);
-      assert.equal(checkReply(reply).valid, true, `${c.q}: ${checkReply(reply).reason}`);
+      assert.ok(reply.endsWith(PUPCLAW_HELP_LINE), `${c.q} ends with Pupclaw's help line`);
+      const check = checkReply(reply, { caregiverLine: PUPCLAW_HELP_LINE });
+      assert.equal(check.valid, true, `${c.q}: ${check.reason}`);
     }
   }
 });
@@ -160,8 +162,8 @@ test('the Pupclaw bank has no food talk, for kids who cannot eat or drink', () =
 
 test('every story card, and every spoken story, ends with the caregiver line', () => {
   const html = renderToStaticMarkup(React.createElement(StoryCard, null, React.createElement('p', null, 'Once upon a time.')));
-  assert.ok(html.endsWith(`${CAREGIVER_LINE}</p></div>`), 'the card closes on the caregiver line');
-  assert.ok(withCaregiverLine('The end.').endsWith(CAREGIVER_LINE));
+  assert.ok(html.endsWith(`${PUPCLAW_HELP_LINE}</p></div>`), 'the card closes on the help line');
+  assert.ok(withCaregiverLine('The end.').endsWith(PUPCLAW_HELP_LINE));
   const app = fs.readFileSync(path.join(DIR, 'PupclawApp.tsx'), 'utf8');
   const spoken = app.match(/\bsay\(withCaregiverLine\(/g) || [];
   assert.ok(spoken.length >= 6, 'stories, fables, adventures, bedtime and the daily treat read the caregiver line aloud');
@@ -221,4 +223,15 @@ test('drawing works without a finger or mouse', () => {
   assert.match(draw, /e\.key === 'Enter' \|\| e\.key === ' '/, 'Enter or Space stamps a paw');
   assert.match(draw, /Surprise paw!/, 'a button stamps a paw for keyboard and switch users');
   assert.match(draw, /ctx\.fillStyle = t\.color;/, 'paw stamps use the chosen colour, so they show even with the eraser picked');
+});
+
+test("Pupclaw's help line names an adult in the room, and Misses Trollz keeps its own", () => {
+  assert.equal(PUPCLAW_HELP_LINE, 'If anyone needs help, please tell an adult in the room right away.');
+  assert.equal(CAREGIVER_LINE, 'If anyone needs help, please tell a nurse or caregiver right away.', 'the hospital line is unchanged');
+  const pupModal = renderToStaticMarkup(React.createElement(GrownUpNeededModal, { isOpen: true, onClose: () => {}, line: PUPCLAW_HELP_LINE }));
+  assert.ok(pupModal.includes(PUPCLAW_HELP_LINE), "Pupclaw's safety screen shows its line");
+  const mtModal = renderToStaticMarkup(React.createElement(GrownUpNeededModal, { isOpen: true, onClose: () => {} }));
+  assert.ok(mtModal.includes(CAREGIVER_LINE), 'the Misses Trollz safety screen still shows the caregiver line');
+  for (const { f, src } of sources) assert.doesNotMatch(src, /nurse/i, `${f} mentions a nurse`);
+  assert.equal(checkReply('Hi! ' + PUPCLAW_HELP_LINE).valid, false, 'the default check still requires the caregiver line');
 });

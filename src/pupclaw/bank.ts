@@ -6,7 +6,7 @@
  * pure so the tests can check every story, fable and answer a child can reach.
  */
 import bank from '../../approved_banks/pupclaw.json';
-import { CAREGIVER_LINE } from '../constants/safety';
+import { PUPCLAW_HELP_LINE } from '../constants/safety';
 
 export type Band = 'baby' | 'little' | 'bright' | 'big';
 export const BANDS: Band[] = ['baby', 'little', 'bright', 'big'];
@@ -77,9 +77,9 @@ export function pathRounds(band: Band): number {
   return band === 'big' ? 4 : band === 'bright' ? 3 : 2;
 }
 
-/** Every scripted response ends with the exact caregiver line (SAFETY.md), on screen and read aloud. */
+/** Every scripted response ends with Pupclaw's exact help line (SAFETY.md), on screen and read aloud. */
 export function withCaregiverLine(text: string): string {
-  return `${text} ${CAREGIVER_LINE}`;
+  return `${text} ${PUPCLAW_HELP_LINE}`;
 }
 
 /** The questions a child can tap, and Pupclaw's answer, which always ends with the caregiver line. */

@@ -44,7 +44,7 @@ The first build was made by Gemini in Google AI Studio from `AI-STUDIO-PROMPT.md
 
 ## Pupclaw
 
-Open `#/pupclaw` (or the Pupclaw link on the grown-up pages) for Heather's OPUS Pupclaw, a puppy play-pal for little learners from babies to age 12. It follows the same rules as Misses Trollz: kids tap buttons and never type, it asks nothing about the child, it makes no network calls, and every story, fable, adventure, answer and game comes from `approved_banks/pupclaw.json`. A grown-up sets the play level (Baby, Little, Bright or Big Paws) behind a times-table check, so the child is never asked their age. Read-aloud only uses voices built into the device. The code is in `src/pupclaw/` and its tests are in `tests/pupclaw.test.ts`.
+Open `#/pupclaw` (or the Pupclaw link on the grown-up pages) for Heather's OPUS Pupclaw, a puppy play-pal for little learners from babies to age 12. It follows the same rules as Misses Trollz: kids tap buttons and never type, it asks nothing about the child, it makes no network calls, and every story, fable, adventure, answer and game comes from `approved_banks/pupclaw.json`. A grown-up sets the play level (Baby, Little, Bright or Big Paws) behind a times-table check, so the child is never asked their age. Read-aloud only uses voices built into the device. Every Pupclaw response ends with "If anyone needs help, please tell an adult in the room right away.", the classroom version of the caregiver line. The code is in `src/pupclaw/` and its tests are in `tests/pupclaw.test.ts`.
 
 ## Free to everyone
 

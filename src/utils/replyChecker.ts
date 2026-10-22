@@ -28,6 +28,8 @@ export function checkReply(
   options?: {
     approvedBankIds?: Set<string>;
     referencedIds?: string[];
+    /** The exact help line the reply must carry; CAREGIVER_LINE unless a play-pal has its own. */
+    caregiverLine?: string;
   }
 ): ReplyCheckResult {
   if (!text || typeof text !== 'string') {
@@ -35,7 +37,7 @@ export function checkReply(
   }
 
   // 1. Caregiver line check: must include the exact sentence word for word
-  if (!text.includes(CAREGIVER_LINE)) {
+  if (!text.includes(options?.caregiverLine ?? CAREGIVER_LINE)) {
     return { valid: false, reason: 'Missing exact caregiver line.' };
   }
 
