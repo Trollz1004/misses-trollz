@@ -7,11 +7,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import pupclaw from '../approved_banks/pupclaw.json';
 import { BLOCKED_WORDS, CAREGIVER_LINE, PERSONAL_DATA_PATTERNS } from '../src/constants/safety';
 import {
   ADVENTURES,
   BANDS,
+  STICKERS,
   FABLE_ANIMALS,
   FABLE_LESSONS,
   askChips,
@@ -22,9 +25,11 @@ import {
   speakable,
   themesFor,
   treatOfDay,
+  withCaregiverLine,
 } from '../src/pupclaw/bank';
 import { pickVoice } from '../src/pupclaw/voice';
-import { newGate } from '../src/pupclaw/PupclawGrownUps';
+import { DEFAULT_PUPCLAW_SETTINGS, newGate } from '../src/pupclaw/PupclawGrownUps';
+import { StoryCard } from '../src/pupclaw/ui';
 import { checkReply } from '../src/utils/replyChecker';
 
 const DIR = path.resolve('src/pupclaw');
@@ -123,19 +128,62 @@ test('read-aloud only ever uses a voice on this device', () => {
 });
 
 test('daily treat, counting game and grown-up check behave', () => {
-  const day = 86400000;
-  assert.equal(treatOfDay(0).label, 'Joke of the day');
-  assert.equal(treatOfDay(day).label, 'Wow fact of the day');
-  assert.equal(treatOfDay(2 * day).label, 'Tongue twister of the day');
-  for (let i = 0; i < 200; i++) {
+  // Local calendar days: three days in a row give three kinds, and the treat holds all day.
+  const labels = [1, 2, 3].map((d) => treatOfDay(new Date(2026, 0, d, 12).getTime()).label);
+  assert.equal(new Set(labels).size, 3, 'three days, three kinds of treat');
+  assert.deepEqual(treatOfDay(new Date(2026, 0, 5, 0, 1).getTime()), treatOfDay(new Date(2026, 0, 5, 23, 59).getTime()), 'one treat per local day');
+  const spot = [0, 0, 0];
+  for (let i = 0; i < 300; i++) {
     for (const band of BANDS) {
       const q = newCountQuestion(band);
       assert.equal(new Set(q.choices).size, 3);
       assert.ok(q.choices.includes(q.ans) && q.choices.every((c) => c > 0));
-      if (band === 'big') assert.ok(q.math);
-      else assert.ok(q.paws && q.paws <= (band === 'bright' ? 12 : 5));
+      if (band === 'big') {
+        const [x, op, y] = q.math!.split(' ');
+        assert.equal(q.ans, op === '×' ? Number(x) * Number(y) : Number(x) + Number(y), `${q.math} = ${q.ans}`);
+      } else assert.ok(q.paws && q.paws <= (band === 'bright' ? 12 : 5));
+      spot[q.choices.indexOf(q.ans)]++;
     }
     const g = newGate();
     assert.ok(g.a * g.b >= 33, 'the grown-up answer is at least two digits');
   }
+  for (const n of spot) assert.ok(n > 300, `the right answer shows up in every spot, not mostly one (${spot})`);
+});
+
+test('the Pupclaw bank has no food talk, for kids who cannot eat or drink', () => {
+  const FOOD = /\b(cookies?|cakes?|candy|eat|eats|eating|food|snacks?|supper|lunch|dinner|breakfast|bread|bananas?|apples?|honey|juice|ice cream|picnic|berr(y|ies)|cinnamon|dessert|gummy|grapes?|coconuts?|coffee|butter|pizza|sandwich|meals?|hungry|tast(y|iest|e|es)|bake[ds]?|baker|sugar|milk|drinks?|crumbs?|feed|stuffed)\b/i;
+  for (const text of strings(pupclaw)) assert.doesNotMatch(text, FOOD, `food talk in: ${text}`);
+  for (const { f, src } of sources) assert.doesNotMatch(src, /grab some water|stand up, stretch/i, `${f} tells a child in bed to get up or drink`);
+});
+
+test('every story card, and every spoken story, ends with the caregiver line', () => {
+  const html = renderToStaticMarkup(React.createElement(StoryCard, null, React.createElement('p', null, 'Once upon a time.')));
+  assert.ok(html.endsWith(`${CAREGIVER_LINE}</p></div>`), 'the card closes on the caregiver line');
+  assert.ok(withCaregiverLine('The end.').endsWith(CAREGIVER_LINE));
+  const app = fs.readFileSync(path.join(DIR, 'PupclawApp.tsx'), 'utf8');
+  const spoken = app.match(/\bsay\(withCaregiverLine\(/g) || [];
+  assert.ok(spoken.length >= 6, 'stories, fables, adventures, bedtime and the daily treat read the caregiver line aloud');
+});
+
+test('sound and read-aloud start off until a grown-up turns them on', () => {
+  assert.equal(DEFAULT_PUPCLAW_SETTINGS.sounds, false);
+  assert.equal(DEFAULT_PUPCLAW_SETTINGS.autoRead, false);
+});
+
+test('every sticker the code awards and every play level it uses exists in the bank', () => {
+  const ids = new Set(STICKERS.map((s) => s.id));
+  const awarded = sources.flatMap(({ src }) => [...src.matchAll(/award\('(\w+)'\)|count\('\w+', \d+, '(\w+)'\)/g)].map((m) => m[1] ?? m[2]));
+  assert.ok(awarded.length >= 9, 'found the award calls');
+  for (const id of awarded) assert.ok(ids.has(id), `sticker "${id}" is awarded but not in the bank`);
+  assert.deepEqual(pupclaw.bands.map((b) => b.id), BANDS);
+});
+
+test('Grown-up needed stays on top and pauses everything', () => {
+  const app = fs.readFileSync(path.join(DIR, 'PupclawApp.tsx'), 'utf8');
+  assert.match(app, /breakDue && kidSide && !grownUpNeeded/, 'no stretch break over the safety screen');
+  assert.match(app, /toast && !grownUpNeeded/, 'no sticker pop-up over the safety screen');
+  assert.match(app, /zIndex: 100 }}>\s*<GrownUpNeededModal/, 'the safety screen sits above every Pupclaw layer');
+  const zs = [...app.matchAll(/zIndex: (\d+)/g)].map((m) => Number(m[1]));
+  assert.equal(Math.max(...zs), 100, 'nothing in Pupclaw sits above the safety screen');
+  assert.match(app, /if \(paused\.current\) return/, 'speech is silenced while paused');
 });

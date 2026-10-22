@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { BANDS, Band, bandInfo } from './bank';
 import { Lock, Speaker } from './art';
 import { VOICES, VoiceId, readAloudAvailable } from './voice';
-import { BROWN, Btn, CREAM, INK, LIGHT, MASCOT, MUTED, Page, BackBtn, pill } from './ui';
+import { BROWN, Btn, CREAM, INK, MASCOT, MUTED, ORANGE_TEXT, Page, BackBtn, TEAL_TEXT, pill } from './ui';
 
 export interface PupclawSettings {
   band: Band;
@@ -27,8 +27,9 @@ export interface PupclawSettings {
 export const DEFAULT_PUPCLAW_SETTINGS: PupclawSettings = {
   band: 'little',
   breakMin: 20,
-  autoRead: true,
-  sounds: true,
+  // Sound is off until a grown-up turns it on (MISSES-TROLLZ-BUILD.md). Tapped "Read to me" buttons always read.
+  autoRead: false,
+  sounds: false,
   calm: false,
   voice: 'puppy',
   allowAsk: true,
@@ -108,7 +109,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
     ['allowStory', 'Stories', 'story time, fables, adventures and bedtime'],
     ['allowGames', 'Games', 'peek-a-boo, ABC, counting, riddles'],
     ['allowDraw', 'Drawing Den', 'the doodle canvas'],
-    ['autoRead', 'Read aloud by itself', 'for Baby Paws and Little Paws'],
+    ['autoRead', 'Read aloud by itself', 'stories for Baby and Little Paws, plus game sounds'],
     ['sounds', 'Silly sounds', 'boops and barks on buttons'],
     ['calm', 'Calm motion', 'stops the bouncing and wiggling'],
   ];
@@ -144,7 +145,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
           </div>
           <div style={{ fontWeight: 800, fontSize: 16, color: BROWN, margin: '8px 0 16px' }}>
             Quick check: what is{' '}
-            <span style={{ color: '#FF7A59', fontSize: 22 }}>
+            <span style={{ color: ORANGE_TEXT, fontSize: 22 }}>
               {gate.a} × {gate.b}
             </span>
             ?
@@ -163,7 +164,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
               padding: 10,
               fontSize: 26,
               minHeight: 58,
-              color: entry ? INK : '#C4A88C',
+              color: entry ? INK : MUTED,
             }}
           >
             {entry || '?'}
@@ -181,7 +182,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
                   borderRadius: 18,
                   border: `3px solid ${INK}`,
                   background: k === 'go' ? '#2BB3A3' : CREAM,
-                  color: k === 'go' ? LIGHT : INK,
+                  color: INK,
                   boxShadow: `0 4px 0 ${k === 'go' ? INK : 'rgba(74,50,34,.22)'}`,
                   fontWeight: 800,
                   fontSize: k === 'go' ? 17 : 24,
@@ -230,7 +231,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
                       <span style={{ display: 'block', fontWeight: 900, fontSize: 16 }}>{info.name}</span>
                       <span style={{ display: 'block', fontWeight: 700, fontSize: 13, color: MUTED }}>ages {info.ages}</span>
                     </span>
-                    <span style={{ fontWeight: 800, fontSize: 13, color: '#1D8377', fontFamily: 'var(--pc-body)' }}>{sel ? '✓ picked' : ''}</span>
+                    <span style={{ fontWeight: 800, fontSize: 13, color: TEAL_TEXT, fontFamily: 'var(--pc-body)' }}>{sel ? '✓ picked' : ''}</span>
                   </Btn>
                 );
               })}
@@ -250,7 +251,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
                     save({ breakMin: m });
                   }}
                   style={{
-                    ...pill(settings.breakMin === m ? '#FF7A59' : CREAM, settings.breakMin === m ? LIGHT : INK, 16, '6px 16px', 3, 'rgba(74,50,34,.18)'),
+                    ...pill(settings.breakMin === m ? '#FF7A59' : CREAM, INK, 16, '6px 16px', 3, 'rgba(74,50,34,.18)'),
                     border: settings.breakMin === m ? ON_RING : OFF_RING,
                   }}
                 >
@@ -348,7 +349,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: LIGHT,
+                        color: INK,
                       }}
                     >
                       <Speaker size={18} />
@@ -357,7 +358,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
                       <span style={{ display: 'block', fontWeight: 900, fontSize: 16 }}>{d.label}</span>
                       <span style={{ display: 'block', fontWeight: 700, fontSize: 13, color: MUTED }}>{d.desc}</span>
                     </span>
-                    <span style={{ fontWeight: 800, fontSize: 13, color: '#1D8377', fontFamily: 'var(--pc-body)' }}>{sel ? '✓ picked' : ''}</span>
+                    <span style={{ fontWeight: 800, fontSize: 13, color: TEAL_TEXT, fontFamily: 'var(--pc-body)' }}>{sel ? '✓ picked' : ''}</span>
                   </Btn>
                 );
               })}
@@ -407,16 +408,16 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
               Only these settings and the sticker book are saved, in this browser on this device. There is no chat log, because there is nothing typed to log.
             </p>
             <p style={{ fontWeight: 800, fontSize: 15, margin: '12px 0 0', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-              <a href="#/child-safety" style={{ color: '#1D8377' }}>
+              <a href="#/child-safety" style={{ color: TEAL_TEXT }}>
                 Child safety rules
               </a>
-              <a href="#/manifesto" style={{ color: '#1D8377' }}>
+              <a href="#/manifesto" style={{ color: TEAL_TEXT }}>
                 Manifesto
               </a>
-              <a href="#/governance" style={{ color: '#1D8377' }}>
+              <a href="#/governance" style={{ color: TEAL_TEXT }}>
                 Governance
               </a>
-              <a href="#/misses-trollz" style={{ color: '#1D8377' }}>
+              <a href="#/misses-trollz" style={{ color: TEAL_TEXT }}>
                 Misses Trollz
               </a>
             </p>

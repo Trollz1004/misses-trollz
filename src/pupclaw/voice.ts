@@ -56,12 +56,13 @@ export function readAloudAvailable(): boolean {
   }
 }
 
+/** Speak on this device. onEnd always runs, also when nothing could be spoken, so a "Stop reading" button never sticks. */
 export function speak(text: string, opts: { voice: VoiceId; rate: number; onEnd?: () => void }): void {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return;
+  if (typeof window === 'undefined' || !window.speechSynthesis) return opts.onEnd?.();
   try {
     const def = VOICES.find((v) => v.id === opts.voice) ?? VOICES[0];
     const choice = pickVoice(window.speechSynthesis.getVoices(), def.kind);
-    if (choice === null) return;
+    if (choice === null) return opts.onEnd?.();
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     if (choice !== 'default') u.voice = choice;
@@ -72,6 +73,7 @@ export function speak(text: string, opts: { voice: VoiceId; rate: number; onEnd?
     window.speechSynthesis.speak(u);
   } catch {
     // Read-aloud is a nice extra; the words are always on screen.
+    opts.onEnd?.();
   }
 }
 

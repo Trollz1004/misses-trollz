@@ -38,6 +38,7 @@ export const FABLE_ANIMALS = bank.fableAnimals;
 export const FABLE_LESSONS = bank.fableLessons;
 export const ADVENTURES = bank.adventures;
 export const PET_LINES = bank.petLines;
+export const STRETCH = bank.stretch;
 export const PRAISE = bank.praise;
 
 export function bandInfo(band: Band) {
@@ -76,17 +77,23 @@ export function pathRounds(band: Band): number {
   return band === 'big' ? 4 : band === 'bright' ? 3 : 2;
 }
 
+/** Every scripted response ends with the exact caregiver line (SAFETY.md), on screen and read aloud. */
+export function withCaregiverLine(text: string): string {
+  return `${text} ${CAREGIVER_LINE}`;
+}
+
 /** The questions a child can tap, and Pupclaw's answer, which always ends with the caregiver line. */
 export function askChips(band: Band): { q: string; a: string }[] {
   return band === 'baby' ? bank.ask.together : bank.ask[band];
 }
 export function askReply(answer: string): string {
-  return `${answer} ${CAREGIVER_LINE}`;
+  return withCaregiverLine(answer);
 }
 
-/** The daily treat rotates joke, wow fact, tongue twister, one per calendar day. */
+/** The daily treat rotates joke, wow fact, tongue twister, one per local calendar day. */
 export function treatOfDay(now: number = Date.now()): { art: string; label: string; text: string } {
-  const day = Math.floor(now / 86400000);
+  const d = new Date(now);
+  const day = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
   const kind = day % 3;
   const pool = kind === 0 ? bank.treats.jokes : kind === 1 ? bank.treats.facts : bank.treats.twisters;
   return {
@@ -121,7 +128,13 @@ export function newCountQuestion(band: Band, rand: () => number = Math.random): 
     if (q.ans + off > 0) set.add(q.ans + off);
   }
   for (let k = 1; set.size < 3; k++) set.add(q.ans + k);
-  q.choices = Array.from(set).sort(() => rand() - 0.5);
+  // Fisher-Yates, so the right answer is equally likely in every spot.
+  const c = Array.from(set);
+  for (let i = c.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [c[i], c[j]] = [c[j], c[i]];
+  }
+  q.choices = c;
   return q;
 }
 

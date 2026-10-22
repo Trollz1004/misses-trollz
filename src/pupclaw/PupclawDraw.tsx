@@ -4,7 +4,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { Paw } from './art';
-import { Btn, CREAM, INK, LIGHT, MUTED, Page, BackBtn, pill } from './ui';
+import { Btn, CREAM, INK, MUTED, Page, BackBtn, pill } from './ui';
 
 const PAPER = '#FFFDF8';
 const COLORS = ['#4A3222', '#FF7A59', '#F98D8D', '#FFC93F', '#7CC576', '#2BB3A3', '#58A6E8', '#B678E0', '#8B5E3C'];
@@ -41,10 +41,13 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
       const r = node.getBoundingClientRect();
       return { x: ((e.clientX - r.left) * node.width) / r.width, y: ((e.clientY - r.top) * node.height) / r.height };
     };
+    // One finger draws at a time; a second finger or a resting palm is ignored.
     let drawing = false;
+    let active = -1;
     let last = { x: 0, y: 0 };
     const down = (e: PointerEvent) => {
       e.preventDefault();
+      if (active !== -1 && e.pointerId !== active) return;
       node.setPointerCapture(e.pointerId);
       const p = pos(e);
       const t = tool.current;
@@ -65,6 +68,7 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
         return;
       }
       drawing = true;
+      active = e.pointerId;
       last = p;
       ctx.strokeStyle = t.eraser ? PAPER : t.color;
       ctx.lineWidth = t.eraser ? t.size * 3 : t.size;
@@ -74,7 +78,7 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
       ctx.stroke();
     };
     const move = (e: PointerEvent) => {
-      if (!drawing) return;
+      if (!drawing || e.pointerId !== active) return;
       const p = pos(e);
       ctx.beginPath();
       ctx.moveTo(last.x, last.y);
@@ -82,8 +86,10 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
       ctx.stroke();
       last = p;
     };
-    const stop = () => {
+    const stop = (e: PointerEvent) => {
+      if (e.pointerId !== active) return;
       drawing = false;
+      active = -1;
     };
     node.addEventListener('pointerdown', down);
     node.addEventListener('pointermove', move);
@@ -194,7 +200,7 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
             <path d="M9 8 l6 6" stroke="currentColor" strokeWidth="2.4" />
           </svg>
         </button>
-        <Btn onClick={clear} dy={3} style={{ ...pill('#FF7A59', LIGHT, 17, '8px 22px', 4), marginLeft: 'auto' }}>
+        <Btn onClick={clear} dy={3} style={{ ...pill('#FF7A59', INK, 17, '8px 22px', 4), marginLeft: 'auto' }}>
           Start over
         </Btn>
       </div>

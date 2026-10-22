@@ -27,8 +27,11 @@
   transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.12s ease;
 }
 .pc-root button:focus-visible {
-  outline: 4px solid #2bb3a3;
+  outline: 4px solid #4a3222;
   outline-offset: 3px;
+}
+.pc-bed button:focus-visible {
+  outline-color: #ffe9b3;
 }
 .pc-d {
   font-family: var(--pc-display);

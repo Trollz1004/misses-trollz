@@ -14,6 +14,7 @@ import {
   FABLE_LESSONS,
   PET_LINES,
   STICKERS,
+  STRETCH,
   Tale,
   askChips,
   askReply,
@@ -23,13 +24,14 @@ import {
   speakable,
   themesFor,
   treatOfDay,
+  withCaregiverLine,
 } from './bank';
 import { IconName, Lock, Paw, Pup, PupFace, Speaker, TileIcon } from './art';
 import { SOUNDS, VoiceId, speak, stopSpeaking } from './voice';
 import { DEFAULT_PUPCLAW_SETTINGS, PupclawGrownUps, PupclawSettings } from './PupclawGrownUps';
 import { Game, PupclawGames } from './PupclawGames';
 import { PupclawDraw } from './PupclawDraw';
-import { BROWN, Btn, CREAM, Header, INK, LIGHT, Loading, MASCOT, MUTED, Page, SOFT, StoryCard, ThinkingDots, pill } from './ui';
+import { BROWN, Btn, CaregiverNote, CREAM, Header, INK, Loading, MASCOT, MUTED, ORANGE_TEXT, Page, SOFT, StoryCard, ThinkingDots, pill } from './ui';
 import { GrownUpNeededModal } from '../components/GrownUpNeededModal';
 import { KidTrustLine } from '../components/site/KidTrustLine';
 import { playGentleChime } from '../utils/audio';
@@ -115,20 +117,29 @@ export const PupclawApp: React.FC = () => {
     timers.current.push(window.setTimeout(fn, ms));
   };
   const sessionStart = useRef(Date.now());
+  // While the Grown-up needed screen is open, nothing speaks, beeps or pops up,
+  // even from a story that was already loading when the button was pressed.
+  const paused = useRef(false);
+  const moodTimer = useRef(0);
 
   const sfx = (name: keyof typeof SOUNDS) => {
-    if (settings.sounds) SOUNDS[name]();
+    if (settings.sounds && !paused.current) SOUNDS[name]();
   };
   const boop = () => sfx('boop');
   const say = useCallback(
     (text: string, opts?: { rate?: number; onEnd?: () => void }) => {
+      if (paused.current) return opts?.onEnd?.();
       const rate = opts?.rate ?? (band === 'baby' || band === 'little' ? 0.88 : 0.98);
       speak(speakable(text), { voice: settings.voice, rate, onEnd: opts?.onEnd });
     },
     [band, settings.voice],
   );
+  /** Speech nobody tapped for: only when a grown-up has turned on Read aloud by itself. */
   const autoSay = (text: string) => {
     if (settings.autoRead && young) say(text);
+  };
+  const gameSay = (text: string) => {
+    if (settings.autoRead) say(text);
   };
 
   const save = (patch: Partial<PupclawSettings>) => {
@@ -151,7 +162,7 @@ export const PupclawApp: React.FC = () => {
     if (b.got[id]) return;
     storeBook({ ...b, got: { ...b.got, [id]: Date.now() } });
     const def = STICKERS.find((d) => d.id === id);
-    if (def) {
+    if (def && !paused.current) {
       setToast(`New sticker: ${def.name}! ${def.art}`);
       sfx('sticker');
     }
@@ -177,14 +188,15 @@ export const PupclawApp: React.FC = () => {
     };
   }, []);
 
-  // Stretch break: counts from the last break, only while a child is on the kids' side.
+  // Stretch break: counts from the last break, only while a child is playing. Never at
+  // bedtime, and never while the Grown-up needed screen is open.
   useEffect(() => {
     const t = setInterval(() => {
-      if (!settings.breakMin || screen === 'welcome' || screen === 'grownups') return;
+      if (!settings.breakMin || grownUpNeeded || screen === 'welcome' || screen === 'grownups' || screen === 'bed') return;
       if ((Date.now() - sessionStart.current) / 60000 >= settings.breakMin) setBreakDue(true);
     }, 20000);
     return () => clearInterval(t);
-  }, [settings.breakMin, screen]);
+  }, [settings.breakMin, screen, grownUpNeeded]);
 
   useEffect(() => {
     if (!chimes) return;
@@ -193,9 +205,29 @@ export const PupclawApp: React.FC = () => {
     return () => clearInterval(t);
   }, [chimes]);
 
+  // Show the top of the newest bubble, so a long answer starts on screen even on a phone.
   useEffect(() => {
-    if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
+    const list = listRef.current;
+    const last = list?.lastElementChild as HTMLElement | null;
+    if (list && last) list.scrollTop = last.offsetTop - list.offsetTop - 6;
   }, [messages, thinking]);
+
+  // Dialogs take focus when they open, the sticker book closes on Escape, and focus goes back after.
+  useEffect(() => {
+    if (!showStickers) return;
+    document.querySelector<HTMLButtonElement>('button[aria-label="Close sticker book"]')?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowStickers(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.querySelector<HTMLButtonElement>('button[aria-label^="My sticker book"]')?.focus();
+    };
+  }, [showStickers]);
+  useEffect(() => {
+    if (breakDue) document.querySelector<HTMLButtonElement>('button[aria-label="All done stretching"]')?.focus();
+  }, [breakDue]);
 
   const go = (s: Screen) => {
     stopSpeaking();
@@ -204,6 +236,7 @@ export const PupclawApp: React.FC = () => {
     setSpeaking(false);
     setChimes(false);
     setThinking(false);
+    setShowStickers(false);
     setMood('');
     setScreen(s);
     window.scrollTo?.(0, 0);
@@ -213,7 +246,9 @@ export const PupclawApp: React.FC = () => {
   const pet = () => {
     sfx('bark');
     setMood(PET_LINES[Math.floor(Math.random() * PET_LINES.length)]);
-    later(() => setMood(''), 3500);
+    clearTimeout(moodTimer.current);
+    moodTimer.current = window.setTimeout(() => setMood(''), 3500);
+    timers.current.push(moodTimer.current);
   };
 
   // ---------- Talk to Pupclaw (tap a question) ----------
@@ -227,8 +262,9 @@ export const PupclawApp: React.FC = () => {
         : band === 'bright'
           ? `Hey there! I'm ${MASCOT}, your puppy pal. Tap a question and I'll answer!`
           : `Hey! ${MASCOT} here. Fun facts, jokes and quizzes, just tap a question.`;
-    setMessages([{ id: msgId.current++, who: 'pup', text: greet }]);
-    autoSay(greet);
+    const hello = withCaregiverLine(greet);
+    setMessages([{ id: msgId.current++, who: 'pup', text: hello }]);
+    autoSay(hello);
   };
   const ask = (q: string, a: string) => {
     if (thinking) return;
@@ -253,7 +289,10 @@ export const PupclawApp: React.FC = () => {
       setStory(tale);
       setStoryStage('read');
       award('story');
-      autoSay(`${tale.title}. ${tale.paras.join(' ')}`);
+      if (settings.autoRead && young) {
+        setSpeaking(true);
+        say(withCaregiverLine(`${tale.title}. ${tale.paras.join(' ')}`), { onEnd: () => setSpeaking(false) });
+      }
     }, 700);
   };
   const storyFont = young ? 26 : band === 'bright' ? 22 : 19;
@@ -267,7 +306,7 @@ export const PupclawApp: React.FC = () => {
       setFable(f);
       setFableStage('read');
       award('fable');
-      autoSay(`${f.title}. ${f.paras.join(' ')} The moral of the story: ${f.moral}`);
+      autoSay(withCaregiverLine(`${f.title}. ${f.paras.join(' ')} The moral of the story: ${f.moral}`));
     }, 700);
   };
 
@@ -311,6 +350,7 @@ export const PupclawApp: React.FC = () => {
   // ---------- Bedtime ----------
   const bedHeading = band === 'big' ? 'Cozy Corner' : 'Bedtime Den';
   const bedStory = () => {
+    if (bedStage === 'loading') return;
     boop();
     setBedStage('loading');
     const i = (bedIdx + 1) % BEDTIME.length;
@@ -318,16 +358,28 @@ export const PupclawApp: React.FC = () => {
       setBedIdx(i);
       setBedStage('read');
       award('bed');
-      say(BEDTIME[i].paras.join(' '), { rate: 0.78 });
+      if (settings.autoRead) say(withCaregiverLine(BEDTIME[i].paras.join(' ')), { rate: 0.78 });
     }, 700);
   };
 
   // ---------- Grown-up needed ----------
+  // Stops everything (SAFETY.md). Pending timers still finish their screen changes, so
+  // nothing is left stuck on a loading screen, but they stay silent while paused.
   const needGrownUp = () => {
+    paused.current = true;
     stopSpeaking();
+    setSpeaking(false);
     setChimes(false);
+    setShowStickers(false);
+    setBreakDue(false);
+    setToast('');
     playGentleChime();
     setGrownUpNeeded(true);
+  };
+  const grownUpCame = () => {
+    paused.current = false;
+    sessionStart.current = Date.now();
+    setGrownUpNeeded(false);
   };
 
   // ---------- Home tiles ----------
@@ -467,7 +519,7 @@ export const PupclawApp: React.FC = () => {
         {screen === 'welcome' && (
           <main style={{ maxWidth: 760, margin: '0 auto', padding: '48px 24px 40px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', zIndex: 1 }} aria-label="Welcome">
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginBottom: 26, animation: 'hopc-pop .5s both' }}>
-              <div className="pc-d" style={{ background: '#FF7A59', color: LIGHT, fontSize: 19, padding: '3px 18px', borderRadius: 999, border: `3px solid ${INK}`, transform: 'rotate(-2deg)', boxShadow: `0 3px 0 ${INK}` }}>
+              <div className="pc-d" style={{ background: '#FF7A59', color: INK, fontSize: 19, padding: '3px 18px', borderRadius: 999, border: `3px solid ${INK}`, transform: 'rotate(-2deg)', boxShadow: `0 3px 0 ${INK}` }}>
                 Heather's
               </div>
               <h1 className="pc-d pc-big-title" style={{ fontSize: 52, lineHeight: 1, letterSpacing: 1, margin: 0, textAlign: 'center' }}>
@@ -497,7 +549,7 @@ export const PupclawApp: React.FC = () => {
                 sessionStart.current = Date.now();
                 go('home');
               }}
-              style={{ ...pill('#FF7A59', LIGHT, 30, '16px 52px'), animation: 'hopc-pop .4s both' }}
+              style={{ ...pill('#FF7A59', INK, 30, '16px 52px'), animation: 'hopc-pop .4s both' }}
             >
               Let's play!
             </Btn>
@@ -515,7 +567,7 @@ export const PupclawApp: React.FC = () => {
           <Page max={1080} label="Home" pad="28px 24px 48px">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, marginBottom: 18, flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div className="pc-d" style={{ background: '#FF7A59', color: LIGHT, fontSize: 14, padding: '2px 12px', borderRadius: 999, border: `2.5px solid ${INK}`, transform: 'rotate(-2deg)', boxShadow: `0 2px 0 ${INK}` }}>
+                <div className="pc-d" style={{ background: '#FF7A59', color: INK, fontSize: 14, padding: '2px 12px', borderRadius: 999, border: `2.5px solid ${INK}`, transform: 'rotate(-2deg)', boxShadow: `0 2px 0 ${INK}` }}>
                   Heather's
                 </div>
                 <div className="pc-d" style={{ fontSize: 24 }}>
@@ -568,10 +620,10 @@ export const PupclawApp: React.FC = () => {
                 onClick={() => {
                   boop();
                   award('daily');
-                  say(`${treat.label}! ${treat.text}`);
+                  say(withCaregiverLine(`${treat.label}! ${treat.text}`));
                 }}
                 dy={3}
-                style={{ ...pill('#2BB3A3', LIGHT, 17, '9px 22px', 4), display: 'flex', alignItems: 'center', gap: 7 }}
+                style={{ ...pill('#2BB3A3', INK, 17, '9px 22px', 4), display: 'flex', alignItems: 'center', gap: 7 }}
               >
                 <Speaker />
                 Read to me
@@ -608,13 +660,14 @@ export const PupclawApp: React.FC = () => {
                     <span className="pc-d" style={{ display: 'block', fontSize: 25, lineHeight: 1.1 }}>
                       {t.title}
                     </span>
-                    <span style={{ display: 'block', fontWeight: 800, fontSize: 15, color: 'rgba(74,50,34,.75)', marginTop: 4, fontFamily: 'var(--pc-body)' }}>{t.sub}</span>
+                    <span style={{ display: 'block', fontWeight: 800, fontSize: 15, color: 'rgba(74,50,34,.85)', marginTop: 4, fontFamily: 'var(--pc-body)' }}>{t.sub}</span>
                   </span>
                 </Btn>
               ))}
             </div>
             {!tiles.length && <div style={{ fontWeight: 800, fontSize: 18, color: MUTED, textAlign: 'center' }}>A grown-up has paused the activities for now.</div>}
-            <div style={{ textAlign: 'center', marginTop: 34, fontWeight: 800, fontSize: 13, color: '#C4A88C' }}>made with love for Heather's academy · {MASCOT} always plays safe</div>
+            <CaregiverNote center />
+          <div style={{ textAlign: 'center', marginTop: 24, fontWeight: 800, fontSize: 13, color: MUTED }}>made with love for Heather's academy · {MASCOT} always plays safe</div>
             <div className="pc-trust" style={{ marginTop: 10 }}>
               <KidTrustLine />
             </div>
@@ -658,7 +711,7 @@ export const PupclawApp: React.FC = () => {
                         }}
                         title="Read it to me!"
                         dy={2}
-                        style={{ ...pill('#2BB3A3', LIGHT, 14, '4px 14px', 3), fontWeight: 700, marginTop: 6, display: 'flex', alignItems: 'center', gap: 6, border: `2.5px solid ${INK}` }}
+                        style={{ ...pill('#2BB3A3', INK, 14, '4px 14px', 3), fontWeight: 700, marginTop: 6, display: 'flex', alignItems: 'center', gap: 6, border: `2.5px solid ${INK}` }}
                       >
                         <Speaker size={16} />
                         Read to me
@@ -672,7 +725,7 @@ export const PupclawApp: React.FC = () => {
                       alignSelf: 'flex-end',
                       maxWidth: '80%',
                       background: '#FF7A59',
-                      color: LIGHT,
+                      color: INK,
                       border: `3px solid ${INK}`,
                       borderRadius: '20px 20px 6px 20px',
                       boxShadow: '0 4px 0 rgba(74,50,34,.25)',
@@ -751,9 +804,9 @@ export const PupclawApp: React.FC = () => {
                         return;
                       }
                       setSpeaking(true);
-                      say(`${story.title}. ${story.paras.join(' ')}`, { onEnd: () => setSpeaking(false) });
+                      say(withCaregiverLine(`${story.title}. ${story.paras.join(' ')}`), { onEnd: () => setSpeaking(false) });
                     }}
-                    style={{ ...pill('#2BB3A3', LIGHT, 20, '12px 26px'), display: 'flex', alignItems: 'center', gap: 8 }}
+                    style={{ ...pill('#2BB3A3', INK, 20, '12px 26px'), display: 'flex', alignItems: 'center', gap: 8 }}
                   >
                     <Speaker size={20} />
                     {speaking ? 'Stop reading' : 'Read it to me!'}
@@ -834,9 +887,9 @@ export const PupclawApp: React.FC = () => {
                   <Btn
                     onClick={() => {
                       boop();
-                      say(`${fable.title}. ${fable.paras.join(' ')} The moral of the story: ${fable.moral}`);
+                      say(withCaregiverLine(`${fable.title}. ${fable.paras.join(' ')} The moral of the story: ${fable.moral}`));
                     }}
-                    style={{ ...pill('#2BB3A3', LIGHT, 20, '12px 26px'), display: 'flex', alignItems: 'center', gap: 8 }}
+                    style={{ ...pill('#2BB3A3', INK, 20, '12px 26px'), display: 'flex', alignItems: 'center', gap: 8 }}
                   >
                     <Speaker size={20} />
                     Read it to me!
@@ -866,7 +919,7 @@ export const PupclawApp: React.FC = () => {
             </Header>
             <StoryCard pad="30px 36px">
               {pathParas.map((p, i) => (
-                <p key={i} style={{ fontWeight: 800, fontSize: storyFont, lineHeight: 1.65, margin: '0 0 14px', color: p.chosen ? '#E8735A' : INK, animation: 'hopc-pop .35s both', ...TEXT.pretty }}>
+                <p key={i} style={{ fontWeight: 800, fontSize: storyFont, lineHeight: 1.65, margin: '0 0 14px', color: p.chosen ? ORANGE_TEXT : INK, animation: 'hopc-pop .35s both', ...TEXT.pretty }}>
                   {p.text}
                 </p>
               ))}
@@ -888,7 +941,7 @@ export const PupclawApp: React.FC = () => {
                         className="pc-choice"
                         style={{ display: 'flex', alignItems: 'center', gap: 16, textAlign: 'left', background: '#FFF3EC', border: `3.5px solid ${INK}`, borderRadius: 22, boxShadow: `0 5px 0 ${INK}`, padding: '16px 22px' }}
                       >
-                        <span className="pc-d" style={{ width: 44, height: 44, flex: 'none', background: '#FF7A59', color: LIGHT, border: `3px solid ${INK}`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
+                        <span className="pc-d" style={{ width: 44, height: 44, flex: 'none', background: '#FF7A59', color: INK, border: `3px solid ${INK}`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
                           {i === 0 ? 'A' : 'B'}
                         </span>
                         <span style={{ fontWeight: 800, fontSize: 19, fontFamily: 'var(--pc-body)' }}>{c.label}</span>
@@ -905,9 +958,9 @@ export const PupclawApp: React.FC = () => {
                   <Btn
                     onClick={() => {
                       boop();
-                      say(pathParas.filter((p) => !p.chosen).map((p) => p.text).join(' '));
+                      say(withCaregiverLine(pathParas.filter((p) => !p.chosen).map((p) => p.text).join(' ')));
                     }}
-                    style={pill('#2BB3A3', LIGHT, 19, '11px 24px')}
+                    style={pill('#2BB3A3', INK, 19, '11px 24px')}
                   >
                     Read it to me!
                   </Btn>
@@ -921,7 +974,7 @@ export const PupclawApp: React.FC = () => {
         )}
 
         {screen === 'bed' && (
-          <main style={{ minHeight: '100vh', background: 'linear-gradient(180deg,#28244C,#443C72)', padding: '26px 24px 96px', position: 'relative', zIndex: 2 }} aria-label="Bedtime den">
+          <main className="pc-bed" style={{ minHeight: '100vh', background: 'linear-gradient(180deg,#28244C,#443C72)', padding: '26px 24px 96px', position: 'relative', zIndex: 2 }} aria-label="Bedtime den">
             {[
               { top: 70, left: '12%', s: 10, d: 2.4, delay: 0 },
               { top: 140, right: '18%', s: 7, d: 3.1, delay: 0.6 },
@@ -952,10 +1005,10 @@ export const PupclawApp: React.FC = () => {
                   Shhh… {MASCOT} is getting sleepy.
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 26 }}>
-                  <Btn onClick={bedStory} sh="#1E1B3A" style={{ ...pill('#B678E0', LIGHT, 21, '13px 30px', 5, '#1E1B3A'), border: '3px solid #1E1B3A' }}>
+                  <Btn onClick={bedStory} sh="#1E1B3A" style={{ ...pill('#B678E0', '#1E1B3A', 21, '13px 30px', 5, '#1E1B3A'), border: '3px solid #1E1B3A' }}>
                     {bedStage === 'read' ? 'One more sleepy story' : 'A sleepy story, please'}
                   </Btn>
-                  <Btn onClick={() => setChimes((c) => !c)} pressed={chimes} sh="#1E1B3A" style={{ ...pill('#2BB3A3', LIGHT, 21, '13px 30px', 5, '#1E1B3A'), border: '3px solid #1E1B3A' }}>
+                  <Btn onClick={() => setChimes((c) => !c)} pressed={chimes} sh="#1E1B3A" style={{ ...pill('#2BB3A3', '#1E1B3A', 21, '13px 30px', 5, '#1E1B3A'), border: '3px solid #1E1B3A' }}>
                     Soft chimes: {chimes ? 'on' : 'off'}
                   </Btn>
                 </div>
@@ -972,13 +1025,14 @@ export const PupclawApp: React.FC = () => {
                       {p}
                     </p>
                   ))}
+                  <CaregiverNote color="#D9D3F2" />
                   <Btn
-                    onClick={() => say(BEDTIME[bedIdx].paras.join(' '), { rate: 0.78 })}
+                    onClick={() => say(withCaregiverLine(BEDTIME[bedIdx].paras.join(' ')), { rate: 0.78 })}
                     dy={3}
                     sh="#1E1B3A"
                     style={{ ...pill('#FFF6E9', INK, 18, '10px 24px', 4, '#1E1B3A'), border: '3px solid #1E1B3A', marginTop: 6 }}
                   >
-                    Read it softly again
+                    Read it to me softly
                   </Btn>
                 </div>
               )}
@@ -993,6 +1047,7 @@ export const PupclawApp: React.FC = () => {
             setGame={setGame}
             onHome={home}
             say={(t) => say(t)}
+            autoSay={gameSay}
             hush={stopSpeaking}
             boop={boop}
             bark={() => sfx('bark')}
@@ -1009,7 +1064,10 @@ export const PupclawApp: React.FC = () => {
           <PupclawGrownUps
             settings={settings}
             save={save}
-            onBack={() => go(grownFrom)}
+            onBack={() => {
+            sessionStart.current = Date.now();
+            go(grownFrom);
+          }}
             boop={boop}
             wrong={() => sfx('wrong')}
             sampleVoice={(v: VoiceId) => speak(`Woof woof! Hi friend! I'm ${MASCOT}!`, { voice: v, rate: 0.95 })}
@@ -1042,7 +1100,7 @@ export const PupclawApp: React.FC = () => {
               position: 'fixed',
               right: 16,
               bottom: 16,
-              zIndex: 58,
+              zIndex: 80,
               ...pill('#FFE4E6', '#9F1239', 16, '10px 18px', 4, '#9F1239'),
               border: '3px solid #9F1239',
               display: 'flex',
@@ -1058,7 +1116,7 @@ export const PupclawApp: React.FC = () => {
           </Btn>
         )}
 
-        {breakDue && kidSide && (
+        {breakDue && kidSide && !grownUpNeeded && (
           <div role="dialog" aria-modal="true" aria-label="Stretch break" style={{ position: 'fixed', inset: 0, background: 'rgba(255,246,233,.97)', zIndex: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
             <div style={{ background: CREAM, border: `4px solid ${INK}`, borderRadius: 32, boxShadow: `0 8px 0 ${INK}`, padding: '40px 48px', textAlign: 'center', maxWidth: 520, animation: 'hopc-pop .4s both' }} className="pc-story-card">
               <div style={{ width: 150, margin: '0 auto 8px', animation: 'hopc-bounce 1.1s ease-in-out infinite' }}>
@@ -1068,7 +1126,7 @@ export const PupclawApp: React.FC = () => {
                 Puppy stretch break!
               </div>
               <div style={{ fontSize: 19, fontWeight: 700, margin: '10px 0 24px', color: BROWN }}>
-                {young ? 'Wiggle like a puppy! Reach up high, touch your toes, and take three big sniffs of air.' : "You've been exploring a while. Stand up, stretch tall, shake it out like a wet puppy, and grab some water!"}
+                {young ? STRETCH.young : STRETCH.older}
               </div>
               <Btn
                 onClick={() => {
@@ -1076,7 +1134,8 @@ export const PupclawApp: React.FC = () => {
                   sessionStart.current = Date.now();
                   setBreakDue(false);
                 }}
-                style={pill('#2BB3A3', LIGHT, 24, '14px 38px')}
+                style={pill('#2BB3A3', INK, 24, '14px 38px')}
+                label="All done stretching"
               >
                 All done stretching!
               </Btn>
@@ -1098,7 +1157,7 @@ export const PupclawApp: React.FC = () => {
                   onClick={() => setShowStickers(false)}
                   label="Close sticker book"
                   dy={2}
-                  style={{ width: 44, height: 44, background: '#FF7A59', color: LIGHT, border: `3px solid ${INK}`, borderRadius: '50%', boxShadow: `0 3px 0 ${INK}`, fontWeight: 800, fontSize: 20 }}
+                  style={{ width: 44, height: 44, background: '#FF7A59', color: INK, border: `3px solid ${INK}`, borderRadius: '50%', boxShadow: `0 3px 0 ${INK}`, fontWeight: 800, fontSize: 20 }}
                 >
                   ✕
                 </Btn>
@@ -1107,7 +1166,7 @@ export const PupclawApp: React.FC = () => {
                 {STICKERS.map((d) => {
                   const got = Boolean(book.got[d.id]);
                   return (
-                    <div key={d.id} style={{ background: got ? '#FFF1BF' : '#F1E7D6', border: `3px solid ${INK}`, borderRadius: 20, padding: '16px 10px', textAlign: 'center', opacity: got ? 1 : 0.6 }}>
+                    <div key={d.id} style={{ background: got ? '#FFF1BF' : '#F1E7D6', border: `3px solid ${INK}`, borderRadius: 20, padding: '16px 10px', textAlign: 'center' }}>
                       <div style={{ fontSize: 44, lineHeight: 1 }}>{got ? d.art : '?'}</div>
                       <div className="pc-d" style={{ fontSize: 17, marginTop: 6 }}>
                         {d.name}
@@ -1122,7 +1181,7 @@ export const PupclawApp: React.FC = () => {
           </div>
         )}
 
-        {toast && (
+        {toast && !grownUpNeeded && (
           // The wrapper centers; the pill animates. One element doing both loses the centering.
           <div style={{ position: 'fixed', left: 16, right: 16, bottom: 80, zIndex: 70, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
             <div
@@ -1150,7 +1209,9 @@ export const PupclawApp: React.FC = () => {
 
       </div>
       {/* Outside .pc-root so the shared safety screen keeps its own look. */}
-      <GrownUpNeededModal isOpen={grownUpNeeded} onClose={() => setGrownUpNeeded(false)} />
+      <div style={{ position: 'relative', zIndex: 100 }}>
+        <GrownUpNeededModal isOpen={grownUpNeeded} onClose={grownUpCame} />
+      </div>
     </>
   );
 };

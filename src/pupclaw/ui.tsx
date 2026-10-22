@@ -3,12 +3,15 @@
  */
 import React from 'react';
 import { Pup } from './art';
+import { CAREGIVER_LINE } from '../constants/safety';
 
 export const INK = '#4A3222';
 export const SOFT = 'rgba(74,50,34,.22)';
 export const CREAM = '#FFFDF8';
-export const LIGHT = '#FFF8EF';
-export const MUTED = '#9C7B5E';
+/** Text colours chosen for at least 4.5:1 contrast on Pupclaw's creams and fills. */
+export const MUTED = '#80634B';
+export const ORANGE_TEXT = '#C2410C';
+export const TEAL_TEXT = '#13796D';
 export const BROWN = '#7A5F49';
 export const MASCOT = 'Pupclaw';
 
@@ -93,12 +96,18 @@ export const Page: React.FC<{ max: number; label: string; pad?: string; children
   </main>
 );
 
-/** The story-book card used by stories, fables and adventures. */
+/** The caregiver line every scripted response ends with (SAFETY.md). */
+export const CaregiverNote: React.FC<{ center?: boolean; color?: string }> = ({ center, color = MUTED }) => (
+  <p style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.5, color, margin: '18px 0 0', textAlign: center ? 'center' : 'left' }}>{CAREGIVER_LINE}</p>
+);
+
+/** The story-book card used by stories, fables and adventures. It always ends with the caregiver line. */
 export const StoryCard: React.FC<{ children: React.ReactNode; pad?: string }> = ({ children, pad = '36px 40px' }) => (
   <div
     className="pc-story-card"
     style={{ background: CREAM, border: `3.5px solid ${INK}`, borderRadius: 28, boxShadow: `0 7px 0 ${SOFT}`, padding: pad, animation: 'hopc-pop .4s both' }}
   >
     {children}
+    <CaregiverNote />
   </div>
 );

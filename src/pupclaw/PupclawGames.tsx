@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { ABC, Band, CountQuestion, PEEK, PRAISE, RIDDLES, newCountQuestion } from './bank';
 import { Paw, Speaker } from './art';
-import { Btn, CREAM, Header, INK, LIGHT, MASCOT, MUTED, Page, pill } from './ui';
+import { Btn, CaregiverNote, CREAM, Header, INK, MASCOT, MUTED, ORANGE_TEXT, Page, TEAL_TEXT, pill } from './ui';
 
 export type Game = 'menu' | 'peek' | 'abc' | 'count' | 'riddle';
 
@@ -13,7 +13,10 @@ interface Props {
   game: Game;
   setGame: (g: Game) => void;
   onHome: () => void;
+  /** Speech the child asked for by tapping a speaker or Say it! button. */
   say: (text: string) => void;
+  /** Speech nobody tapped for; silent unless a grown-up turned on Read aloud by itself. */
+  autoSay: (text: string) => void;
   hush: () => void;
   boop: () => void;
   bark: () => void;
@@ -34,7 +37,7 @@ const bigCard = (pad: string, max = 560): React.CSSProperties => ({
   textAlign: 'center',
 });
 
-export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say, hush, boop, bark, right, wrong, count, award }) => {
+export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say, autoSay, hush, boop, bark, right, wrong, count, award }) => {
   const [peekOpen, setPeekOpen] = useState(false);
   const [peekIdx, setPeekIdx] = useState(0);
   const [abcIdx, setAbcIdx] = useState(0);
@@ -44,15 +47,16 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
   const [riddleIdx, setRiddleIdx] = useState(() => Math.floor(Math.random() * RIDDLES.length));
   const [riddleShown, setRiddleShown] = useState(false);
 
-  const abcSay = (i: number) => {
+  const abcLine = (i: number) => {
     const [l, w] = ABC[i];
-    say(`${l}! ${l} is for ${w}!`);
+    return `${l}! ${l} is for ${w}!`;
   };
   const newCount = () => {
     setQ(newCountQuestion(band));
     setCountState('ask');
   };
   const newRiddle = () => {
+    hush();
     boop();
     setRiddleShown(false);
     setRiddleIdx((i) => (i + 1 + Math.floor(Math.random() * (RIDDLES.length - 1))) % RIDDLES.length);
@@ -61,7 +65,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
   const open = (g: Game) => {
     boop();
     if (g === 'peek') setPeekOpen(false);
-    if (g === 'abc') abcSay(abcIdx);
+    if (g === 'abc') autoSay(abcLine(abcIdx));
     if (g === 'count') {
       newCount();
       setStreak(0);
@@ -123,7 +127,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
               <span className="pc-d" style={{ fontSize: 23 }}>
                 {g.title}
               </span>
-              <span style={{ fontWeight: 800, fontSize: 14, color: 'rgba(74,50,34,.75)', fontFamily: 'var(--pc-body)' }}>{g.sub}</span>
+              <span style={{ fontWeight: 800, fontSize: 14, color: 'rgba(74,50,34,.85)', fontFamily: 'var(--pc-body)' }}>{g.sub}</span>
             </Btn>
           ))}
         </div>
@@ -137,7 +141,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
               const i = Math.floor(Math.random() * PEEK.length);
               setPeekIdx(i);
               setPeekOpen(true);
-              say(`Boo! ${PEEK[i].name}! ${PEEK[i].sound}`);
+              autoSay(`Boo! ${PEEK[i].name}! ${PEEK[i].sound}`);
               count('peek', 5, 'peek');
             } else {
               setPeekOpen(false);
@@ -170,7 +174,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
               <span className="pc-d" style={{ fontSize: 44, animation: 'hopc-pop .35s both' }}>
                 …BOO! {peek.name}!
               </span>
-              <span style={{ fontWeight: 800, fontSize: 24, color: '#FF7A59', fontFamily: 'var(--pc-body)' }}>{peek.sound}</span>
+              <span style={{ fontWeight: 800, fontSize: 24, color: ORANGE_TEXT, fontFamily: 'var(--pc-body)' }}>{peek.sound}</span>
               <span style={{ fontWeight: 800, fontSize: 16, color: MUTED, fontFamily: 'var(--pc-body)' }}>tap again for another friend</span>
             </>
           )}
@@ -180,7 +184,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
       {game === 'abc' && (
         <div style={bigCard('36px 24px')}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
-            <div className="pc-d" style={{ fontSize: 130, lineHeight: 1, color: '#FF7A59' }}>
+            <div className="pc-d" style={{ fontSize: 130, lineHeight: 1, color: ORANGE_TEXT }}>
               {abcL}
             </div>
             <div style={{ fontSize: 96, lineHeight: 1 }} aria-hidden="true">
@@ -193,8 +197,8 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
           <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 22, flexWrap: 'wrap' }}>
             {[
               { d: -1, text: '←', label: 'Previous letter', bg: CREAM, fg: INK, sh: 'rgba(74,50,34,.25)' },
-              { d: 0, text: 'Say it!', label: 'Say it', bg: '#2BB3A3', fg: LIGHT, sh: INK },
-              { d: 1, text: '→', label: 'Next letter', bg: '#FF7A59', fg: LIGHT, sh: INK },
+              { d: 0, text: 'Say it!', label: 'Say it', bg: '#2BB3A3', fg: INK, sh: INK },
+              { d: 1, text: '→', label: 'Next letter', bg: '#FF7A59', fg: INK, sh: INK },
             ].map((b) => (
               <Btn
                 key={b.d}
@@ -202,11 +206,11 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
                 sh={b.sh}
                 onClick={() => {
                   boop();
-                  if (b.d === 0) return abcSay(abcIdx);
+                  if (b.d === 0) return say(abcLine(abcIdx));
                   hush();
                   const n = (abcIdx + b.d + ABC.length) % ABC.length;
                   setAbcIdx(n);
-                  abcSay(n);
+                  autoSay(abcLine(n));
                 }}
                 style={{ ...pill(b.bg, b.fg, 22, b.d === 0 ? '12px 30px' : '12px 26px', 5, b.sh), display: 'flex', alignItems: 'center', gap: 8 }}
               >
@@ -232,7 +236,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
               ))}
             </div>
           ) : (
-            <div className="pc-d" style={{ fontSize: 72, margin: '16px 0', color: '#2BB3A3' }}>
+            <div className="pc-d" style={{ fontSize: 72, margin: '16px 0', color: TEAL_TEXT }}>
               {q.math}
             </div>
           )}
@@ -251,9 +255,10 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
                       setStreak(s);
                       setCountState('right');
                       if (s >= 3) award('math');
-                      say(PRAISE[Math.floor(Math.random() * PRAISE.length)]);
+                      autoSay(PRAISE[Math.floor(Math.random() * PRAISE.length)]);
                     } else {
                       wrong();
+                      setStreak(0);
                       setCountState('wrong');
                     }
                   }}
@@ -264,7 +269,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
                     border: `3.5px solid ${INK}`,
                     boxShadow: `0 6px 0 ${INK}`,
                     background: lit ? '#2BB3A3' : CREAM,
-                    color: lit ? LIGHT : INK,
+                    color: INK,
                     fontWeight: 800,
                     fontSize: 38,
                   }}
@@ -275,7 +280,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
             })}
           </div>
           {countState !== 'ask' && (
-            <div className="pc-d" role="status" style={{ marginTop: 20, fontSize: 30, color: countState === 'right' ? '#1D8377' : '#E8735A', animation: 'hopc-pop .3s both' }}>
+            <div className="pc-d" role="status" style={{ marginTop: 20, fontSize: 30, color: countState === 'right' ? TEAL_TEXT : ORANGE_TEXT, animation: 'hopc-pop .3s both' }}>
               {countState === 'right' ? ['PAW-SOME!', 'You got it!', 'Super smart!'][streak % 3] : 'Almost! Try again…'}
             </div>
           )}
@@ -285,7 +290,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
                 boop();
                 newCount();
               }}
-              style={{ ...pill('#FF7A59', LIGHT, 22, '12px 30px'), marginTop: 14 }}
+              style={{ ...pill('#FF7A59', INK, 22, '12px 30px'), marginTop: 14 }}
             >
               Next one!
             </Btn>
@@ -298,7 +303,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
         <div style={bigCard('34px 30px', 640)}>
           <div style={{ fontWeight: 800, fontSize: 24, lineHeight: 1.6, textWrap: 'pretty' } as React.CSSProperties}>{riddle.q}</div>
           {riddleShown && (
-            <div className="pc-d" style={{ marginTop: 18, background: '#DFF3EF', border: `3px solid ${INK}`, borderRadius: 18, padding: '12px 20px', fontSize: 28, color: '#1D8377', animation: 'hopc-pop .3s both' }}>
+            <div className="pc-d" style={{ marginTop: 18, background: '#DFF3EF', border: `3px solid ${INK}`, borderRadius: 18, padding: '12px 20px', fontSize: 28, color: TEAL_TEXT, animation: 'hopc-pop .3s both' }}>
               {riddle.a}
             </div>
           )}
@@ -309,9 +314,9 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
                   boop();
                   setRiddleShown(true);
                   award('riddle');
-                  say(riddle.a);
+                  autoSay(riddle.a);
                 }}
-                style={pill('#2BB3A3', LIGHT, 21, '12px 28px')}
+                style={pill('#2BB3A3', INK, 21, '12px 28px')}
               >
                 Show the answer!
               </Btn>
@@ -332,6 +337,7 @@ export const PupclawGames: React.FC<Props> = ({ band, game, setGame, onHome, say
           </div>
         </div>
       )}
+      {game !== 'menu' && <CaregiverNote center />}
     </Page>
   );
 };

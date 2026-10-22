@@ -21,8 +21,8 @@
     },
     {
       "id": "pc-theme-space", "label": "Outer Space", "art": "🚀", "bands": ["little", "bright", "big"],
-      "short": { "title": "Your Rocket to the Moon", "paras": ["You and Pupclaw built a rocket out of a big cardboard box. Three, two, one, blast off!", "Zoom! You flew past twinkly stars.", "On the moon, you bounced up high. Boing! Boing! Pupclaw found a moon rock shaped like a bone.", "Then you zoomed home for supper. The end!"] },
-      "long": { "title": "The Lost Little Star", "paras": ["One night you and Pupclaw climbed into a rocket made from a cardboard box, a colander and a lot of tape. Three, two, one, blast off! You zoomed past the clouds and into the sparkly sky.", "Out among the planets you met a tiny star who had wandered away from her family. She was glowing very softly because she missed them. Pupclaw gave a gentle woof. Don't worry, we will help you find them!", "You flew past a ringed planet and a moon that looked like a cookie, until you saw a whole twinkly family waving their light. The little star zipped home and glowed her brightest glow. On the way back to Earth, every star in the sky winked at you to say thank you."] }
+      "short": { "title": "Your Rocket to the Moon", "paras": ["You and Pupclaw built a rocket out of a big cardboard box. Three, two, one, blast off!", "Zoom! You flew past twinkly stars.", "On the moon, you bounced up high. Boing! Boing! Pupclaw found a moon rock shaped like a bone.", "Then you zoomed home for a cozy nap. The end!"] },
+      "long": { "title": "The Lost Little Star", "paras": ["One night you and Pupclaw climbed into a rocket made from a cardboard box, a colander and a lot of tape. Three, two, one, blast off! You zoomed past the clouds and into the sparkly sky.", "Out among the planets you met a tiny star who had wandered away from her family. She was glowing very softly because she missed them. Pupclaw gave a gentle woof. Don't worry, we will help you find them!", "You flew past a ringed planet and a moon that looked like a giant button, until you saw a whole twinkly family waving their light. The little star zipped home and glowed her brightest glow. On the way back to Earth, every star in the sky winked at you to say thank you."] }
     },
     {
       "id": "pc-theme-sea", "label": "Under the Sea", "art": "🐳", "bands": ["little", "bright", "big"],
@@ -41,13 +41,13 @@
     },
     {
       "id": "pc-theme-jungle", "label": "Jungle Friends", "art": "🐵", "bands": ["little", "bright", "big"],
-      "short": { "title": "Your Jungle Band", "paras": ["You and Pupclaw went to the jungle. A monkey played the drums. Boom, boom!", "A parrot sang. Tweet, tweet! Pupclaw howled along. Awoo!", "You shook a coconut like a rattle.", "Everyone danced until the moon came up. The end!"] },
-      "long": { "title": "The Jungle Band Contest", "paras": ["You and Pupclaw swung on a vine into the green, leafy jungle. Everyone was busy, because tonight was the Jungle Band Contest, and the monkey band had no singer.", "The parrot was too shy. The frog only knew one note. The sloth was still yawning. So Pupclaw tried, and out came a long, wobbly awoo. The monkeys looked at each other. Then they grinned.", "You played a coconut shaker, the monkeys played drums, and Pupclaw howled the chorus. The band did not win the prize for best music. They won the prize for most fun, and everyone agreed that was the better prize."] }
+      "short": { "title": "Your Jungle Band", "paras": ["You and Pupclaw went to the jungle. A monkey played the drums. Boom, boom!", "A parrot sang. Tweet, tweet! Pupclaw howled along. Awoo!", "You shook a pair of maracas. Shake, shake!", "Everyone danced until the moon came up. The end!"] },
+      "long": { "title": "The Jungle Band Contest", "paras": ["You and Pupclaw swung on a vine into the green, leafy jungle. Everyone was busy, because tonight was the Jungle Band Contest, and the monkey band had no singer.", "The parrot was too shy. The frog only knew one note. The sloth was still yawning. So Pupclaw tried, and out came a long, wobbly awoo. The monkeys looked at each other. Then they grinned.", "You played the maracas, the monkeys played drums, and Pupclaw howled the chorus. The band did not win the prize for best music. They won the prize for most fun, and everyone agreed that was the better prize."] }
     },
     {
       "id": "pc-theme-castles", "label": "Castles", "art": "🏰", "bands": ["little", "bright", "big"],
       "short": { "title": "Your Bouncy Castle", "paras": ["You and Pupclaw found a castle on a hill. The gate was open. Creak!", "Inside, the floor was bouncy! Boing! You bounced up to the tower.", "A friendly queen gave you a crown made of daisies.", "Then you bounced all the way home. The end!"] },
-      "long": { "title": "The Castle With No Name", "paras": ["On top of a green hill stood a castle with tall towers and flags. You and Pupclaw knocked on the big wooden door, and a friendly knight opened it. Welcome, he said. But our castle is sad. It has no name!", "You explored every room for ideas. One room was full of bouncy pillows. One had a library with a slide. The kitchen smelled like warm bread, and the tower had a telescope pointed at the stars.", "At the very top, Pupclaw sneezed, and his sneeze sounded exactly like the word Bramblewood. Everyone loved it. That night the castle had a party, with a new flag that said Bramblewood and a paw print in the corner, just for Pupclaw."] }
+      "long": { "title": "The Castle With No Name", "paras": ["On top of a green hill stood a castle with tall towers and flags. You and Pupclaw knocked on the big wooden door, and a friendly knight opened it. Welcome, he said. But our castle is sad. It has no name!", "You explored every room for ideas. One room was full of bouncy pillows. One had a library with a slide. The music room had a drum as big as a pond, and the tower had a telescope pointed at the stars.", "At the very top, Pupclaw sneezed, and his sneeze sounded exactly like the word Bramblewood. Everyone loved it. That night the castle had a party, with a new flag that said Bramblewood and a paw print in the corner, just for Pupclaw."] }
     },
     {
       "id": "pc-theme-robots", "label": "Robots", "art": "🤖", "bands": ["little", "bright", "big"],
@@ -56,7 +56,7 @@
     },
     {
       "id": "pc-theme-mystery", "label": "Mystery Club", "art": "🔍", "bands": ["big"],
-      "long": { "title": "The Case of the Missing Cookies", "paras": ["At the Mystery Club meeting, you had one important case. The plate of cookies for the class picnic had vanished, and all that was left was a trail of crumbs and one tiny feather.", "You took out your notebook. Pupclaw sniffed the crumbs. The trail led past the swings, around the slide and up to the old oak tree. You looked up, and there in a nest sat a family of baby birds, each one wearing cookie crumbs like a beard.", "Their mother had only wanted to feed them. So the Mystery Club made a deal. The birds could keep the crumbs, and the club would bake a fresh batch with extra for the nest. Case closed, and it was the tastiest case you ever solved."] }
+      "long": { "title": "The Case of the Missing Ribbons", "paras": ["At the Mystery Club meeting, you had one important case. The bright ribbons for the class parade had vanished, and all that was left was one tiny feather and a single red thread.", "You took out your notebook. Pupclaw sniffed the thread. The trail led past the swings, around the slide and up to the old oak tree. You looked up, and there sat a cozy nest woven with every color of ribbon, and a family of baby birds snuggled inside.", "Their mother had only wanted a soft, warm home for her babies. So the Mystery Club made a deal. The birds could keep the nest ribbons, and the club would make new paper streamers for the parade. Case closed, and it was the most colorful case you ever solved."] }
     },
     {
       "id": "pc-theme-sports", "label": "Sports Day", "art": "⚽", "bands": ["big"],
@@ -76,8 +76,8 @@
   "fableLessons": [
     {
       "id": "pc-fable-sharing", "label": "Sharing", "moral": "Sharing makes good things even better.",
-      "short": { "title": "The {Animal} Who Learned to Share", "paras": ["Once there was a little {animal} with a big basket of berries. A friend came by and asked for one.", "Mine, mine, mine! said the little {animal}. But eating alone was not much fun.", "So the little {animal} shared, and together they had a berry picnic."] },
-      "long": { "title": "The {Animal} Who Learned to Share", "paras": ["Once upon a time, a little {animal} found the biggest berry bush in the whole meadow. The little {animal} picked every berry and piled them in a basket so tall it wobbled.", "Soon a friend came by, then another, and another. Could we have a few? they asked. The little {animal} hugged the basket. These are mine! So the friends went off to play, and the little {animal} sat alone with a mountain of berries and nobody to laugh with.", "The berries started to taste a little less sweet. So the little {animal} ran after the friends and called, Come back! Let's have a picnic! They ate and played until sunset, and the little {animal} discovered that berries taste best when they are shared."] }
+      "short": { "title": "The {Animal} Who Learned to Share", "paras": ["Once there was a little {animal} with a big basket of shiny shells. A friend came by and asked to see one.", "Mine, mine, mine! said the little {animal}. But playing alone was not much fun.", "So the little {animal} shared, and together they built a sparkly shell castle."] },
+      "long": { "title": "The {Animal} Who Learned to Share", "paras": ["Once upon a time, a little {animal} found the shiniest shells on the whole beach. The little {animal} gathered every one and piled them in a basket so tall it wobbled.", "Soon a friend came by, then another, and another. Could we see a few? they asked. The little {animal} hugged the basket. These are mine! So the friends went off to play, and the little {animal} sat alone with a mountain of shells and nobody to laugh with.", "The shells started to look a little less shiny. So the little {animal} ran after the friends and called, Come back! Let's build a shell castle! They built and played until sunset, and the little {animal} discovered that shells sparkle brightest when they are shared."] }
     },
     {
       "id": "pc-fable-kindness", "label": "Kindness", "moral": "A little kindness always comes back around.",
@@ -97,7 +97,7 @@
     {
       "id": "pc-fable-patience", "label": "Patience", "moral": "Good things grow when we wait and keep caring.",
       "short": { "title": "The Patient Little {Animal}", "paras": ["A little {animal} planted a tiny seed. Grow! Grow! Grow! But the seed just slept.", "Every day, the little {animal} gave it water and sang it a song.", "Then one morning, pop! A big yellow sunflower said hello!"] },
-      "long": { "title": "The Patient Little {Animal}", "paras": ["In spring, a little {animal} planted a seed and waited for it to grow. One minute passed. Then two. Grow already! said the little {animal}, tapping a foot. But the soil stayed flat and brown.", "The little {animal} wanted to dig it up and check. Grandpa Badger shook his head. Seeds are like good ideas, he said. They need water, sunshine and time. So every day, the little {animal} gave the seed a drink and sang it a little song.", "Days turned into weeks. Then one bright morning, a tiny green sprout poked up, and by summer it was a sunflower taller than the barn. The little {animal} sat in its shade and smiled. The waiting had been the hardest part, and the most worth it."] }
+      "long": { "title": "The Patient Little {Animal}", "paras": ["In spring, a little {animal} planted a seed and waited for it to grow. One minute passed. Then two. Grow already! said the little {animal}, tapping a foot. But the soil stayed flat and brown.", "The little {animal} wanted to dig it up and check. Grandpa Badger shook his head. Seeds are like good ideas, he said. They need water, sunshine and time. So every day, the little {animal} gave the seed some water and sang it a little song.", "Days turned into weeks. Then one bright morning, a tiny green sprout poked up, and by summer it was a sunflower taller than the barn. The little {animal} sat in its shade and smiled. The waiting had been the hardest part, and the most worth it."] }
     },
     {
       "id": "pc-fable-teamwork", "label": "Teamwork", "moral": "Together we can do big things.",
@@ -110,7 +110,7 @@
       "id": "pc-path-trail", "title": "The Glowing Paw-Print Trail",
       "rounds": [
         { "intro": "You and Pupclaw found a glowing paw-print trail in the garden. It sparkled like tiny stars, and it split two ways.", "choices": [
-          { "label": "Follow it to the treehouse", "outcome": "Up in the treehouse sat a shy squirrel with a plate of acorn cookies she had baked all by herself." },
+          { "label": "Follow it to the treehouse", "outcome": "Up in the treehouse sat a shy squirrel with a pile of pinecones she had painted all by herself." },
           { "label": "Follow it to the pond", "outcome": "By the pond, a fluffy little duck was stuck on a lily pad, flapping her tiny wings. You and Pupclaw helped her paddle to shore." } ] },
         { "intro": "Your new friend looked at you with big, hopeful eyes.", "choices": [
           { "label": "Ask her to be your friend", "outcome": "Your new friend did a happy wiggle. Now there were three of you!" },
@@ -119,10 +119,10 @@
           { "label": "Hop across the rainbow stones", "outcome": "Each stone played a note as you landed. Boing, bing, bong! You made a whole song with your feet." },
           { "label": "Peek into the humming cave", "outcome": "Inside, a hundred glowworms were humming together, and they glowed brighter when you hummed along." } ] },
         { "intro": "At the very end of the trail, you found a wooden box with a paw-print lock.", "choices": [
-          { "label": "Let Pupclaw open it", "outcome": "Pupclaw pressed his paw on the lock. Click! Inside was a picnic for everyone." },
-          { "label": "Open it all together", "outcome": "You all pressed your hands and paws on the lock at once. Click! Inside was a picnic for everyone." } ] }
+          { "label": "Let Pupclaw open it", "outcome": "Pupclaw pressed his paw on the lock. Click! Inside were glittery paw-print stickers for everyone." },
+          { "label": "Open it all together", "outcome": "You all pressed your hands and paws on the lock at once. Click! Inside were glittery paw-print stickers for everyone." } ] }
       ],
-      "ending": "Everyone shared the picnic and laughed until the stars came out. Pupclaw wagged his tail. Best adventure ever, he said. The end!"
+      "ending": "Everyone shared the stickers and laughed until the stars came out. Pupclaw wagged his tail. Best adventure ever, he said. The end!"
     },
     {
       "id": "pc-path-kite", "title": "The Runaway Kite",
@@ -131,7 +131,7 @@
           { "label": "Chase it down the hill", "outcome": "You and Pupclaw rolled down the grassy hill like two giggly logs. At the bottom, the kite string was caught on a fence post." },
           { "label": "Ask the birds to help", "outcome": "Three friendly birds swooped down, grabbed the string, and gently dropped it on top of a fence post." } ] },
         { "intro": "Just as you reached the kite, the wind tugged it again, and it floated toward the town square.", "choices": [
-          { "label": "Walk fast along the sidewalk", "outcome": "You waved to the baker and the mail carrier as you went. They waved back and pointed the way." },
+          { "label": "Walk fast along the sidewalk", "outcome": "You waved to the gardener and the mail carrier as you went. They waved back and pointed the way." },
           { "label": "Ride a bike with Pupclaw in the basket", "outcome": "Pupclaw sat in the basket with his ears flapping like two little flags. Wheee!" } ] },
         { "intro": "In the town square, the kite was stuck in a tree, right next to a sleepy cat.", "choices": [
           { "label": "Ask the cat to nudge it down", "outcome": "The cat stretched, yawned, and gave the kite a gentle pat. Down it floated, right into your hands." },
@@ -144,7 +144,7 @@
     }
   ],
   "bedtime": [
-    { "id": "pc-bed-blanket", "paras": ["The sky pulled on its soft purple blanket, and the stars blinked hello.", "Pupclaw gave a squeaky little yawn and curled up like a cinnamon roll.", "You snuggled close, cozy as a sunbeam.", "The moon hummed a quiet song, low and slow.", "One by one, the crickets tucked away their tiny violins.", "Good night, whispered Pupclaw. Sweet dreams."] },
+    { "id": "pc-bed-blanket", "paras": ["The sky pulled on its soft purple blanket, and the stars blinked hello.", "Pupclaw gave a squeaky little yawn and curled up into a fluffy ball.", "You snuggled close, cozy as a sunbeam.", "The moon hummed a quiet song, low and slow.", "One by one, the crickets tucked away their tiny violins.", "Good night, whispered Pupclaw. Sweet dreams."] },
     { "id": "pc-bed-cloud", "paras": ["Far away, a little cloud was getting sleepy.", "It floated slower, and slower, and slower.", "It drifted over quiet hills and gentle rivers.", "Pupclaw watched it from his soft blanket and took a long, slow breath. In, and out. In, and out.", "The little cloud tucked itself behind the moon and closed its eyes.", "And so can you. Good night."] },
     { "id": "pc-bed-meadow", "paras": ["In the quiet meadow, the fireflies are dimming their lights, a little more, and a little more.", "The bunnies are hopping home to their burrows.", "The birds are tucking their heads under their wings.", "Pupclaw stretches his paws and lays his head on his pillow.", "Everything is calm. Everything is cozy.", "Sleep tight, little friend."] },
     { "id": "pc-bed-sheep", "paras": ["Let's count sleepy sheep with Pupclaw.", "One sheep, soft and fluffy, hops over the fence.", "Two sheep, yawning a big sheep yawn.", "Three sheep, walking slowly, slowly.", "Four sheep, curling up in the cool green grass. Five sheep, already fast asleep.", "Pupclaw is sleepy too. Shhh. Good night."] }
@@ -153,31 +153,31 @@
     "jokes": [
       "What do you call a sleeping dinosaur? A dino-snore!",
       "What does a cloud wear under its coat? Thunderwear!",
-      "What do you call a bear with no teeth? A gummy bear!",
-      "Why do bananas wear sunscreen? So they don't peel!",
+      "What did one wall say to the other wall? I'll meet you at the corner!",
+      "Why are fish so smart? Because they live in schools!",
       "What do you call a dog that does magic tricks? A labracadabrador!",
-      "Why did the teddy bear say no to dessert? She was already stuffed!",
-      "What kind of key opens a banana? A mon-key!",
+      "What do you call a sleepy bull? A bulldozer!",
+      "Why did the kitten sit on the computer? To keep an eye on the mouse!",
       "How do you make an octopus laugh? With ten-tickles!"
     ],
     "facts": [
       "A puppy's nose print is one of a kind, just like your fingerprint!",
       "Octopuses have three hearts. Three!",
-      "Honey can stay good to eat for thousands of years. Bees are amazing!",
+      "Sloths can hold their breath longer than dolphins can!",
       "A group of flamingos is called a flamboyance!",
-      "Butterflies taste with their feet!",
+      "A group of owls is called a parliament!",
       "Sea otters hold hands when they nap so they don't float apart.",
       "Cows have best friends, and they feel calmer when they are together.",
       "The footprints on the moon will stay there for millions of years, because there is no wind to blow them away."
     ],
     "twisters": [
-      "Say it fast three times: A proper copper coffee pot!",
+      "Say it fast three times: Around the rugged rocks the ragged rascal ran!",
       "Try this one: She sells seashells by the seashore!",
       "Fast three times: Red lorry, yellow lorry!",
-      "Try it: Fred fed Ted bread!",
+      "Try it: Silly sheep sleep in a shed!",
       "Say it quick: Fuzzy Wuzzy was a bear!",
       "Three times fast: Toy boat, toy boat, toy boat!",
-      "Try: Betty bought a bit of butter!",
+      "Try: Swan swam over the sea. Swim, swan, swim!",
       "Quick, quick: Unique New York!"
     ]
   },
@@ -194,7 +194,7 @@
       { "q": "Why is the sky blue?", "a": "Sunlight has all the colors inside it. The air bounces the blue part all around the sky, so blue is what we see!" },
       { "q": "Sing the ABC song!", "a": "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y and Z! Now I know my ABCs. Woof! Next time, sing with me!" },
       { "q": "Why do puppies wag?", "a": "Puppies wag their tails when they feel happy and excited. When I see you, my tail goes wag, wag, wag!" },
-      { "q": "What color is a banana?", "a": "A banana is yellow! Yellow like the sun, and yellow like a ducky. What else is yellow?" }
+      { "q": "What color is a frog?", "a": "A frog is often green! Green like grass, and green like leaves. What else is green?" }
     ],
     "bright": [
       { "q": "Tell me a silly joke!", "a": "What do you call a dog that does magic? A labracadabrador! Paws-itively magical!" },
@@ -207,9 +207,9 @@
     "big": [
       { "q": "Tell me an amazing space fact", "a": "A day on Venus is longer than a year on Venus! It spins so slowly that it goes all the way around the Sun before it finishes one turn." },
       { "q": "Quiz me on animals!", "a": "Quiz time! Which animal can doze standing up? Horses can! They lock their legs so they can nap without tipping over. Did you guess it?" },
-      { "q": "Give me a poem idea", "a": "Try this: write about your favorite place using all five senses. What do you see, hear, smell, taste and feel there? Start with: In my favorite place..." },
+      { "q": "Give me a poem idea", "a": "Try this: write about your favorite place using all five senses. What do you see, hear, smell and feel there? Start with: In my favorite place..." },
       { "q": "What's the fastest animal?", "a": "On land, it's the cheetah, which can sprint about as fast as a car on the highway. In the air, the peregrine falcon is even faster when it dives!" },
-      { "q": "How do plants eat?", "a": "Plants make their own food! Their leaves use sunlight, water and air to make sugar. That is called photosynthesis. Try saying that three times fast!" },
+      { "q": "How do plants grow?", "a": "Plants make their own energy! Their leaves use sunlight, water and air to do it. That is called photosynthesis. Try saying that three times fast!" },
       { "q": "Why is the ocean salty?", "a": "Rain slowly washes tiny bits of minerals from rocks into rivers, and rivers carry them to the sea. Over millions of years, the salt added up!" }
     ]
   },
@@ -240,9 +240,9 @@
     { "art": "🐑", "name": "Sheep", "sound": "Baa baa!" }
   ],
   "abc": [
-    ["A", "Apple", "🍎"], ["B", "Bear", "🐻"], ["C", "Cat", "🐱"], ["D", "Duck", "🦆"], ["E", "Egg", "🥚"],
-    ["F", "Fish", "🐟"], ["G", "Grapes", "🍇"], ["H", "Hat", "🎩"], ["I", "Ice cream", "🍦"], ["J", "Juice", "🧃"],
-    ["K", "Kite", "🪁"], ["L", "Lion", "🦁"], ["M", "Moon", "🌙"], ["N", "Nose", "👃"], ["O", "Orange", "🍊"],
+    ["A", "Ant", "🐜"], ["B", "Bear", "🐻"], ["C", "Cat", "🐱"], ["D", "Duck", "🦆"], ["E", "Elephant", "🐘"],
+    ["F", "Fish", "🐟"], ["G", "Goat", "🐐"], ["H", "Hat", "🎩"], ["I", "Iguana", "🦎"], ["J", "Jaguar", "🐆"],
+    ["K", "Kite", "🪁"], ["L", "Lion", "🦁"], ["M", "Moon", "🌙"], ["N", "Nose", "👃"], ["O", "Owl", "🦉"],
     ["P", "Puppy", "🐶"], ["Q", "Queen", "👑"], ["R", "Rainbow", "🌈"], ["S", "Star", "⭐"], ["T", "Turtle", "🐢"],
     ["U", "Umbrella", "☂️"], ["V", "Violin", "🎻"], ["W", "Whale", "🐳"], ["X", "Xylophone", "🎶"], ["Y", "Yo-yo", "🪀"],
     ["Z", "Zebra", "🦓"]
@@ -259,6 +259,10 @@
     { "id": "daily", "art": "🌞", "name": "Early Bird", "hint": "hear a daily treat" },
     { "id": "bed", "art": "🌙", "name": "Bedtime Star", "hint": "hear a sleepy story" }
   ],
+  "stretch": {
+    "young": "Wiggle like a puppy! Wiggle your fingers, roll your shoulders, and take three big sniffs of air.",
+    "older": "You have been exploring a while. Wiggle your fingers, roll your shoulders, take three slow breaths, and rest your eyes on something far away."
+  },
   "petLines": ["Woof woof!", "That tickles!", "Best friend ever!", "Paws-itively lovely!", "More pets please!"],
   "praise": ["Paw-some!", "You got it!", "Super smart!"]
 }
