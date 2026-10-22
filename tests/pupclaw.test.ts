@@ -120,7 +120,9 @@ test('read-aloud only ever uses a voice on this device', () => {
   const samantha = { name: 'Samantha', lang: 'en-US', localService: true };
   const daniel = { name: 'Daniel', lang: 'en-GB', localService: true };
   assert.equal(pickVoice([cloud], 'any'), null, 'cloud-only: say nothing');
-  assert.equal(pickVoice([], 'any'), 'default', 'no list yet: the built-in voice');
+  assert.equal(pickVoice([], 'any'), null, 'no confirmed on-device voice yet: say nothing, never the unnamed default');
+  const voiceSrc = fs.readFileSync(path.join(DIR, 'voice.ts'), 'utf8');
+  assert.match(voiceSrc, /u\.voice = choice;/, 'every utterance names an on-device voice');
   assert.equal(pickVoice([cloud, samantha, daniel], 'female'), samantha);
   assert.equal(pickVoice([cloud, samantha, daniel], 'male'), daniel);
   assert.notEqual(pickVoice([cloud, daniel], 'female'), cloud);
@@ -200,4 +202,22 @@ test('an adventure ending only mentions things every play level has met', () => 
     const late = words(a.rounds.slice(2).flatMap((r) => [r.intro, ...r.choices.flatMap((c) => [c.label, c.outcome])]).join(' '));
     for (const w of words(a.ending)) assert.ok(!late.has(w) || early.has(w), `${a.id} ending mentions "${w}", which Little Paws never reach`);
   }
+});
+
+test('only grown-up settings are saved; nothing a child does is stored', () => {
+  const app = fs.readFileSync(path.join(DIR, 'PupclawApp.tsx'), 'utf8');
+  const writes = [...app.matchAll(/persist\((\w+),/g)].map((m) => m[1]);
+  assert.ok(writes.length > 0 && writes.every((k) => k === 'SETTINGS_KEY'), `only settings are persisted (saw ${writes})`);
+  for (const { f, src } of sources) {
+    const direct = (src.match(/localStorage\.setItem/g) || []).length;
+    assert.ok(f === 'PupclawApp.tsx' ? direct === 1 : direct === 0, `${f} writes to storage directly`);
+    assert.doesNotMatch(src, /sessionStorage|indexedDB|document\.cookie/, `${f} uses another kind of storage`);
+  }
+});
+
+test('drawing works without a finger or mouse', () => {
+  const draw = fs.readFileSync(path.join(DIR, 'PupclawDraw.tsx'), 'utf8');
+  assert.match(draw, /tabIndex=\{0\}/, 'the drawing paper can be reached with Tab');
+  assert.match(draw, /e\.key === 'Enter' \|\| e\.key === ' '/, 'Enter or Space stamps a paw');
+  assert.match(draw, /Surprise paw!/, 'a button stamps a paw for keyboard and switch users');
 });

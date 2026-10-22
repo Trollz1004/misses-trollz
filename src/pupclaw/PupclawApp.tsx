@@ -27,7 +27,7 @@ import {
   withCaregiverLine,
 } from './bank';
 import { IconName, Lock, Paw, Pup, PupFace, Speaker, TileIcon } from './art';
-import { SOUNDS, VoiceId, speak, stopSpeaking } from './voice';
+import { SOUNDS, VoiceId, speak, stopSpeaking, warmVoices } from './voice';
 import { DEFAULT_PUPCLAW_SETTINGS, PupclawGrownUps, PupclawSettings } from './PupclawGrownUps';
 import { Game, PupclawGames } from './PupclawGames';
 import { PupclawDraw } from './PupclawDraw';
@@ -38,7 +38,9 @@ import { playGentleChime } from '../utils/audio';
 import './pupclaw.css';
 
 const SETTINGS_KEY = 'pupclaw_settings_v1';
-const STICKERS_KEY = 'pupclaw_stickers_v1';
+// Only grown-up settings are saved (MISSES-TROLLZ-BUILD.md). The sticker book lives in
+// memory and is gone when the page closes; this old key is only here to erase it.
+const OLD_STICKERS_KEY = 'pupclaw_stickers_v1';
 
 type Screen = 'welcome' | 'home' | 'ask' | 'story' | 'games' | 'draw' | 'grownups' | 'fable' | 'paths' | 'bed';
 interface Msg {
@@ -79,7 +81,7 @@ const FloatingPaw: React.FC<{ style: React.CSSProperties }> = ({ style }) => (
 
 export const PupclawApp: React.FC = () => {
   const [settings, setSettings] = useState<PupclawSettings>(() => load(SETTINGS_KEY, DEFAULT_PUPCLAW_SETTINGS));
-  const [book, setBook] = useState<{ got: Record<string, number>; counts: Record<string, number> }>(() => load(STICKERS_KEY, { got: {}, counts: {} }));
+  const [book, setBook] = useState<{ got: Record<string, boolean>; counts: Record<string, number> }>({ got: {}, counts: {} });
   const [screen, setScreen] = useState<Screen>('welcome');
   const [mood, setMood] = useState('');
   const [toast, setToast] = useState('');
@@ -155,12 +157,11 @@ export const PupclawApp: React.FC = () => {
   const storeBook = (next: typeof book) => {
     bookRef.current = next;
     setBook(next);
-    persist(STICKERS_KEY, next);
   };
   const award = (id: string) => {
     const b = bookRef.current;
     if (b.got[id]) return;
-    storeBook({ ...b, got: { ...b.got, [id]: Date.now() } });
+    storeBook({ ...b, got: { ...b.got, [id]: true } });
     const def = STICKERS.find((d) => d.id === id);
     if (def && !paused.current) {
       setToast(`New sticker: ${def.name}! ${def.art}`);
@@ -182,6 +183,12 @@ export const PupclawApp: React.FC = () => {
 
   useEffect(() => {
     document.title = "Heather's OPUS Pupclaw";
+    warmVoices();
+    try {
+      localStorage.removeItem(OLD_STICKERS_KEY);
+    } catch {
+      // storage blocked: nothing was saved
+    }
     return () => {
       stopSpeaking();
       timers.current.forEach(clearTimeout);
@@ -1089,7 +1096,6 @@ export const PupclawApp: React.FC = () => {
             resetAll={() => {
               try {
                 localStorage.removeItem(SETTINGS_KEY);
-                localStorage.removeItem(STICKERS_KEY);
               } catch {
                 // ignore
               }

@@ -30,6 +30,10 @@
   outline: 4px solid #4a3222;
   outline-offset: 3px;
 }
+.pc-root canvas:focus-visible {
+  outline: 4px solid #4a3222;
+  outline-offset: -6px;
+}
 .pc-bed button:focus-visible {
   outline-color: #ffe9b3;
 }

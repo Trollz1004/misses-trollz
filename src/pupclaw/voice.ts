@@ -31,13 +31,12 @@ const MALE = /\bmale|david|daniel|alex\b|fred|george|james|guy|mark|richard|arth
 type VoiceLike = Pick<SpeechSynthesisVoice, 'name' | 'lang' | 'localService'>;
 
 /**
- * Choose a voice for a kind. Returns:
- * - a local voice to use,
- * - 'default' when the browser has not listed voices (it then uses its own built-in one),
- * - null when every listed voice is a cloud voice, so nothing is spoken.
+ * Choose an on-device voice for a kind, or null when none is confirmed: while the
+ * browser is still loading its voices, or when it only offers cloud voices. The
+ * browser's unnamed default can be a cloud voice, so it is never used.
  */
-export function pickVoice<V extends VoiceLike>(voices: V[], kind: VoiceDef['kind']): V | 'default' | null {
-  if (!voices.length) return 'default';
+export function pickVoice<V extends VoiceLike>(voices: V[], kind: VoiceDef['kind']): V | null {
+  if (!voices.length) return null;
   const local = voices.filter((v) => v.localService);
   if (!local.length) return null;
   const english = local.filter((v) => /^en/i.test(v.lang));
@@ -65,8 +64,8 @@ export function speak(text: string, opts: { voice: VoiceId; rate: number; onEnd?
     if (choice === null) return opts.onEnd?.();
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    if (choice !== 'default') u.voice = choice;
-    u.lang = choice !== 'default' ? choice.lang : 'en-US';
+    u.voice = choice;
+    u.lang = choice.lang;
     u.pitch = def.pitch;
     u.rate = opts.rate * (def.rateMul ?? 1);
     if (opts.onEnd) {
@@ -77,6 +76,15 @@ export function speak(text: string, opts: { voice: VoiceId; rate: number; onEnd?
   } catch {
     // Read-aloud is a nice extra; the words are always on screen.
     opts.onEnd?.();
+  }
+}
+
+/** Ask the browser for its voices early; some only list them after the first call. */
+export function warmVoices(): void {
+  try {
+    if (typeof window !== 'undefined' && window.speechSynthesis) window.speechSynthesis.getVoices();
+  } catch {
+    // ignore
   }
 }
 

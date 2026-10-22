@@ -27,6 +27,8 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
   tool.current = { color, size, stamp, eraser };
   const handlers = useRef({ boop, onStamp });
   handlers.current = { boop, onStamp };
+  // Set once the canvas is ready; finger taps, the Surprise paw button and the keyboard all stamp through it.
+  const stampAt = useRef<(x: number, y: number) => void>(() => {});
 
   useEffect(() => {
     const node = canvasRef.current;
@@ -42,6 +44,21 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
       return { x: ((e.clientX - r.left) * node.width) / r.width, y: ((e.clientY - r.top) * node.height) / r.height };
     };
     // One finger draws at a time; a second finger or a resting palm is ignored.
+    stampAt.current = (x: number, y: number) => {
+      const t = tool.current;
+      const s = t.size * 2.2;
+      ctx.fillStyle = t.eraser ? PAPER : t.color;
+      ctx.beginPath();
+      ctx.ellipse(x, y + s * 0.5, s * 0.55, s * 0.45, 0, 0, 7);
+      ctx.fill();
+      for (const [dx, dy] of [[-0.72, -0.05], [-0.26, -0.38], [0.26, -0.38], [0.72, -0.05]]) {
+        ctx.beginPath();
+        ctx.arc(x + dx * s, y + dy * s, s * 0.26, 0, 7);
+        ctx.fill();
+      }
+      handlers.current.boop();
+      handlers.current.onStamp();
+    };
     let drawing = false;
     let active = -1;
     let last = { x: 0, y: 0 };
@@ -52,19 +69,7 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
       const p = pos(e);
       const t = tool.current;
       if (t.stamp) {
-        const c = t.eraser ? PAPER : t.color;
-        const s = t.size * 2.2;
-        ctx.fillStyle = c;
-        ctx.beginPath();
-        ctx.ellipse(p.x, p.y + s * 0.5, s * 0.55, s * 0.45, 0, 0, 7);
-        ctx.fill();
-        for (const [dx, dy] of [[-0.72, -0.05], [-0.26, -0.38], [0.26, -0.38], [0.72, -0.05]]) {
-          ctx.beginPath();
-          ctx.arc(p.x + dx * s, p.y + dy * s, s * 0.26, 0, 7);
-          ctx.fill();
-        }
-        handlers.current.boop();
-        handlers.current.onStamp();
+        stampAt.current(p.x, p.y);
         return;
       }
       drawing = true;
@@ -103,6 +108,13 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
     };
   }, []);
 
+  /** A paw print somewhere on the paper, for anyone drawing with a keyboard or switch. */
+  const surprisePaw = () => {
+    const node = canvasRef.current;
+    if (!node) return;
+    const margin = 90;
+    stampAt.current(margin + Math.random() * (node.width - margin * 2), margin + Math.random() * (node.height - margin * 2));
+  };
   const clear = () => {
     boop();
     const node = canvasRef.current;
@@ -200,12 +212,30 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
             <path d="M9 8 l6 6" stroke="currentColor" strokeWidth="2.4" />
           </svg>
         </button>
-        <Btn onClick={clear} dy={3} style={{ ...pill('#FF7A59', INK, 17, '8px 22px', 4), marginLeft: 'auto' }}>
-          Start over
-        </Btn>
+        <div style={{ display: 'flex', gap: 10, marginLeft: 'auto', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          <Btn onClick={surprisePaw} dy={3} style={pill('#FFC93F', INK, 17, '8px 20px', 4)}>
+            Surprise paw!
+          </Btn>
+          <Btn onClick={clear} dy={3} style={pill('#FF7A59', INK, 17, '8px 20px', 4)}>
+            Start over
+          </Btn>
+        </div>
       </div>
       <div style={{ background: CREAM, border: `4px solid ${INK}`, borderRadius: 28, boxShadow: `0 8px 0 ${INK}`, overflow: 'hidden' }}>
-        <canvas ref={canvasRef} width={1200} height={760} aria-label="Drawing paper" style={{ display: 'block', width: '100%', touchAction: 'none', cursor: 'crosshair' }} />
+        <canvas
+          ref={canvasRef}
+          width={1200}
+          height={760}
+          tabIndex={0}
+          aria-label="Drawing paper. Press Enter or Space to stamp a paw print."
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              surprisePaw();
+            }
+          }}
+          style={{ display: 'block', width: '100%', touchAction: 'none', cursor: 'crosshair' }}
+        />
       </div>
     </Page>
   );

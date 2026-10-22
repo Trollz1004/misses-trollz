@@ -309,7 +309,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
             <div style={{ fontWeight: 700, fontSize: 14, color: MUTED, marginBottom: 14 }}>the read-aloud voice everywhere. Tap one to hear it.</div>
             {!voiceOk && (
               <div style={{ background: '#FFF1BF', border: `3px solid ${INK}`, borderRadius: 16, padding: '8px 14px', fontWeight: 800, fontSize: 14, marginBottom: 12 }}>
-                This browser only offers voices that run on the internet, so read-aloud stays off to keep every word on this device. The words are always on screen.
+                Read-aloud needs a voice that runs on this device, and this browser has not offered one, so read-aloud stays off to keep every word on this device. The words are always on screen.
               </div>
             )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -405,7 +405,7 @@ export const PupclawGrownUps: React.FC<Props> = ({ settings, save, onBack, boop,
               </Btn>
             </div>
             <p style={{ fontWeight: 800, fontSize: 16, color: MUTED, margin: 0, lineHeight: 1.5 }}>
-              Only these settings and the sticker book are saved, in this browser on this device. There is no chat log, because there is nothing typed to log.
+              Only these grown-up settings are saved, in this browser on this device. The sticker book lasts until the page is closed. There is no chat log, because there is nothing typed to log.
             </p>
             <p style={{ fontWeight: 800, fontSize: 15, margin: '12px 0 0', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <a href="#/child-safety" style={{ color: TEAL_TEXT }}>
