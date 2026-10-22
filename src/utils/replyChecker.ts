@@ -28,14 +28,16 @@ export function checkReply(
   options?: {
     approvedBankIds?: Set<string>;
     referencedIds?: string[];
+    /** The exact help line the reply must carry; CAREGIVER_LINE unless a play-pal has its own. */
+    caregiverLine?: string;
   }
 ): ReplyCheckResult {
   if (!text || typeof text !== 'string') {
     return { valid: false, reason: 'Reply is empty or not a string.' };
   }
 
-  // 1. Caregiver line check: must include the exact sentence word for word
-  if (!text.includes(CAREGIVER_LINE)) {
+  // 1. Caregiver line check: the reply must end with the exact sentence, word for word (SAFETY.md)
+  if (!text.trimEnd().endsWith(options?.caregiverLine ?? CAREGIVER_LINE)) {
     return { valid: false, reason: 'Missing exact caregiver line.' };
   }
 

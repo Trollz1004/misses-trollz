@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Pup } from './art';
-import { CAREGIVER_LINE } from '../constants/safety';
+import { PUPCLAW_HELP_LINE } from '../constants/safety';
 
 export const INK = '#4A3222';
 export const SOFT = 'rgba(74,50,34,.22)';
@@ -96,9 +96,9 @@ export const Page: React.FC<{ max: number; label: string; pad?: string; children
   </main>
 );
 
-/** The caregiver line every scripted response ends with (SAFETY.md). */
+/** Pupclaw's help line, which every scripted response ends with (SAFETY.md). */
 export const CaregiverNote: React.FC<{ center?: boolean; color?: string }> = ({ center, color = MUTED }) => (
-  <p style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.5, color, margin: '18px 0 0', textAlign: center ? 'center' : 'left' }}>{CAREGIVER_LINE}</p>
+  <p style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.5, color, margin: '18px 0 0', textAlign: center ? 'center' : 'left' }}>{PUPCLAW_HELP_LINE}</p>
 );
 
 /** The story-book card used by stories, fables and adventures. It always ends with the caregiver line. */

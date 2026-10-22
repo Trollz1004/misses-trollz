@@ -35,6 +35,7 @@ import { BROWN, Btn, CaregiverNote, CREAM, Header, INK, Loading, MASCOT, MUTED, 
 import { GrownUpNeededModal } from '../components/GrownUpNeededModal';
 import { KidTrustLine } from '../components/site/KidTrustLine';
 import { playGentleChime } from '../utils/audio';
+import { PUPCLAW_HELP_LINE } from '../constants/safety';
 import './pupclaw.css';
 
 const SETTINGS_KEY = 'pupclaw_settings_v1';
@@ -1233,7 +1234,7 @@ export const PupclawApp: React.FC = () => {
       </div>
       {/* Outside .pc-root so the shared safety screen keeps its own look. */}
       <div style={{ position: 'relative', zIndex: 100 }}>
-        <GrownUpNeededModal isOpen={grownUpNeeded} onClose={grownUpCame} />
+        <GrownUpNeededModal isOpen={grownUpNeeded} onClose={grownUpCame} line={PUPCLAW_HELP_LINE} />
       </div>
     </>
   );

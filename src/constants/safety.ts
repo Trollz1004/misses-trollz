@@ -4,6 +4,13 @@
 
 export const CAREGIVER_LINE = "If anyone needs help, please tell a nurse or caregiver right away.";
 
+/**
+ * Pupclaw is played in preschools and classrooms, where the nearest grown-up is a
+ * teacher, so its exact line names an adult in the room (Joshua, 2026-10-22).
+ * Same rule as CAREGIVER_LINE: every Pupclaw response ends with it, word for word.
+ */
+export const PUPCLAW_HELP_LINE = "If anyone needs help, please tell an adult in the room right away.";
+
 export const SYSTEM_PROMPT = `You are Misses Trollz, a cartoon avatar in a free app that cheers up children in hospitals. You are a fictional character. Never say or suggest you are a real person, alive, or able to do things in the real world.
 
 WHO YOU ARE

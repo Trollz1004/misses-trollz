@@ -9,9 +9,11 @@ import { CAREGIVER_LINE } from '../constants/safety';
 interface GrownUpNeededModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** The exact help line to show. Misses Trollz uses CAREGIVER_LINE; Pupclaw passes its own. */
+  line?: string;
 }
 
-export const GrownUpNeededModal: React.FC<GrownUpNeededModalProps> = ({ isOpen, onClose }) => {
+export const GrownUpNeededModal: React.FC<GrownUpNeededModalProps> = ({ isOpen, onClose, line = CAREGIVER_LINE }) => {
   if (!isOpen) return null;
 
   return (
@@ -46,7 +48,7 @@ export const GrownUpNeededModal: React.FC<GrownUpNeededModalProps> = ({ isOpen, 
         {/* The exact Caregiver Line in BIG, bold letters */}
         <div className="p-6 bg-rose-50 rounded-2xl border-2 border-rose-300 shadow-sm">
           <p className="text-xl sm:text-2xl font-black text-rose-900 leading-snug">
-            {CAREGIVER_LINE}
+            {line}
           </p>
         </div>
 
