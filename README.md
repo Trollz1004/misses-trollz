@@ -42,6 +42,10 @@ You need Node.js. In this folder, run `npm install` and then `npm run dev`, and 
 
 The first build was made by Gemini in Google AI Studio from `AI-STUDIO-PROMPT.md` on 2026-10-02 and judged by Claude: 18 of 18 tests pass, the kid screen has no text box, and every button was tried on screen.
 
+## Pupclaw
+
+Open `#/pupclaw` (or the Pupclaw link on the grown-up pages) for Heather's OPUS Pupclaw, a puppy play-pal for little learners from babies to age 12. It follows the same rules as Misses Trollz: kids tap buttons and never type, it asks nothing about the child, it makes no network calls, and every story, fable, adventure, answer and game comes from `approved_banks/pupclaw.json`. A grown-up sets the play level (Baby, Little, Bright or Big Paws) behind a times-table check, so the child is never asked their age. Read-aloud only uses voices built into the device. The code is in `src/pupclaw/` and its tests are in `tests/pupclaw.test.ts`.
+
 ## Free to everyone
 
 Code is MIT (`LICENSE`). Art, text and banks are CC0 (`ASSETS-LICENSE`). Take it, build it, give it away. The one ask, which is not a legal condition: use it in favor of others, and keep kids safe.

@@ -15,5 +15,14 @@ for name in ["activities", "looks", "presentations"]:
         for k in ("text", "bed", "spoken"):
             if k in e and BLOCKED.search(e[k]): fails.append(f"{e['id']} {k}: blocked word '{BLOCKED.search(e[k]).group(0)}'")
         if name == "activities" and not e.get("bed"): fails.append(f"{e['id']} has no from-bed version")
-print("\n".join(fails) or f"scope ok: {len(ids)} bank entries")
+def walk(v):
+    if isinstance(v, str): yield v
+    elif isinstance(v, list):
+        for x in v: yield from walk(x)
+    elif isinstance(v, dict):
+        for x in v.values(): yield from walk(x)
+pup = list(walk(json.loads((root / "approved_banks" / "pupclaw.json").read_text(encoding="utf-8"))))
+for t in pup:
+    if BLOCKED.search(t): fails.append(f"pupclaw: blocked word '{BLOCKED.search(t).group(0)}' in: {t[:60]}")
+print("\n".join(fails) or f"scope ok: {len(ids)} bank entries, {len(pup)} Pupclaw lines")
 sys.exit(1 if fails else 0)

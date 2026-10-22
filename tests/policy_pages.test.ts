@@ -122,7 +122,9 @@ test('routes: hash and path forms both resolve, unknown goes to play', () => {
   assert.equal(parseRoute('', '/child-safety'), 'child-safety');
   assert.equal(parseRoute('', '/misses-trollz/'), 'play');
   assert.equal(parseRoute('#/nope'), 'play');
-  assert.deepEqual(NAV.map((n) => n.href), ['#/misses-trollz', '#/manifesto', '#/governance', '#/child-safety']);
+  assert.equal(parseRoute('#/pupclaw'), 'pupclaw');
+  assert.equal(parseRoute('', '/heathersOPUSpupclaw.html'), 'pupclaw');
+  assert.deepEqual(NAV.map((n) => n.href), ['#/misses-trollz', '#/pupclaw', '#/manifesto', '#/governance', '#/child-safety']);
 });
 
 test('reject conditions: no fundraising, urgency, growth or tracking code, and no medical outcome claims', () => {

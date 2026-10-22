@@ -8,10 +8,11 @@
  */
 import { useEffect, useState } from 'react';
 
-export type Route = 'play' | 'manifesto' | 'governance' | 'child-safety';
+export type Route = 'play' | 'pupclaw' | 'manifesto' | 'governance' | 'child-safety';
 
 export const NAV: ReadonlyArray<{ route: Route; href: string; label: string; title: string }> = [
   { route: 'play', href: '#/misses-trollz', label: 'Misses Trollz', title: 'Misses Trollz' },
+  { route: 'pupclaw', href: '#/pupclaw', label: 'Pupclaw', title: "Heather's OPUS Pupclaw" },
   { route: 'manifesto', href: '#/manifesto', label: 'Manifesto', title: 'Manifesto | Misses Trollz' },
   { route: 'governance', href: '#/governance', label: 'Governance', title: 'Governance | Misses Trollz' },
   { route: 'child-safety', href: '#/child-safety', label: 'Child Safety', title: 'Child Safety | Misses Trollz' },
@@ -20,6 +21,9 @@ export const NAV: ReadonlyArray<{ route: Route; href: string; label: string; tit
 const BY_SLUG: Record<string, Route> = {
   '': 'play',
   'misses-trollz': 'play',
+  pupclaw: 'pupclaw',
+  heatherspupclaw: 'pupclaw',
+  heathersopuspupclaw: 'pupclaw',
   manifesto: 'manifesto',
   governance: 'governance',
   'child-safety': 'child-safety',
