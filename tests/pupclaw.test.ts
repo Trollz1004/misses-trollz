@@ -220,4 +220,5 @@ test('drawing works without a finger or mouse', () => {
   assert.match(draw, /tabIndex=\{0\}/, 'the drawing paper can be reached with Tab');
   assert.match(draw, /e\.key === 'Enter' \|\| e\.key === ' '/, 'Enter or Space stamps a paw');
   assert.match(draw, /Surprise paw!/, 'a button stamps a paw for keyboard and switch users');
+  assert.match(draw, /ctx\.fillStyle = t\.color;/, 'paw stamps use the chosen colour, so they show even with the eraser picked');
 });

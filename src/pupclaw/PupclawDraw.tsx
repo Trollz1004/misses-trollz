@@ -47,7 +47,8 @@ export const PupclawDraw: React.FC<{ title: string; onBack: () => void; boop: ()
     stampAt.current = (x: number, y: number) => {
       const t = tool.current;
       const s = t.size * 2.2;
-      ctx.fillStyle = t.eraser ? PAPER : t.color;
+      // Paw prints always use the chosen colour, even with the eraser picked, so a stamp is never invisible.
+      ctx.fillStyle = t.color;
       ctx.beginPath();
       ctx.ellipse(x, y + s * 0.5, s * 0.55, s * 0.45, 0, 0, 7);
       ctx.fill();
