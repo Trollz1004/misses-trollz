@@ -1,0 +1,114 @@
+/*
+ * Pupclaw - styles. Fonts are not downloaded (the app makes no network calls):
+ * Baloo 2 and Nunito are used when the device has them, then rounded system fonts.
+ */
+.pc-root {
+  --pc-display: 'Baloo 2', ui-rounded, 'SF Pro Rounded', 'Arial Rounded MT Bold', 'Nunito', system-ui, sans-serif;
+  --pc-body: 'Nunito', ui-rounded, 'SF Pro Rounded', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  min-height: 100vh;
+  position: relative;
+  /* clip, not just hidden: a focused button can never scroll the page sideways. */
+  overflow: hidden;
+  overflow: clip;
+  background: #fff6e9;
+  color: #4a3222;
+  font-family: var(--pc-body);
+  font-weight: 700;
+}
+.pc-root *,
+.pc-root *::before,
+.pc-root *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+.pc-root button {
+  font-family: var(--pc-display);
+  color: inherit;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.12s ease;
+}
+.pc-root button:focus-visible {
+  outline: 4px solid #4a3222;
+  outline-offset: 3px;
+}
+.pc-root canvas:focus-visible {
+  outline: 4px solid #4a3222;
+  outline-offset: -6px;
+}
+.pc-bed button:focus-visible {
+  outline-color: #ffe9b3;
+}
+.pc-d {
+  font-family: var(--pc-display);
+  font-weight: 800;
+}
+
+/* Press: the button sinks into its shadow. --pc-dy and --pc-sh are set per button. */
+.pc-press:active {
+  transform: translateY(var(--pc-dy, 4px)) !important;
+  box-shadow: 0 1px 0 var(--pc-sh, #4a3222) !important;
+}
+.pc-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 0 #4a3222 !important;
+}
+.pc-grow:hover {
+  transform: scale(1.08);
+}
+.pc-grow-sm:hover {
+  transform: scale(1.06);
+}
+.pc-dot:hover {
+  transform: scale(1.15);
+}
+.pc-hl:hover {
+  background: #fff1bf !important;
+}
+.pc-choice:hover {
+  background: #ffe4d6 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #4a3222 !important;
+}
+.pc-shrink:active {
+  transform: scale(0.92);
+}
+
+@keyframes hopc-bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-9px) } }
+@keyframes hopc-wig { 0%, 100% { transform: rotate(-4deg) } 50% { transform: rotate(4deg) } }
+@keyframes hopc-pop { 0% { transform: scale(.6); opacity: 0 } 70% { transform: scale(1.06) } 100% { transform: scale(1); opacity: 1 } }
+@keyframes hopc-bounce { 0%, 100% { transform: translateY(0) } 30% { transform: translateY(-14px) } }
+@keyframes hopc-float { 0%, 100% { transform: translateY(0) rotate(-8deg) } 50% { transform: translateY(-14px) rotate(8deg) } }
+@keyframes hopc-think { 0%, 80%, 100% { transform: scale(.7); opacity: .35 } 40% { transform: scale(1); opacity: 1 } }
+@keyframes hopc-shake { 0%, 100% { transform: translateX(0) } 25% { transform: translateX(-8px) } 75% { transform: translateX(8px) } }
+@keyframes hopc-twinkle { 0%, 100% { opacity: .25; transform: scale(.8) } 50% { opacity: 1; transform: scale(1.2) } }
+
+/* Calm motion (grown-up switch) and the device's reduce-motion setting stop the bobbing. */
+.pc-calm *,
+.pc-calm *::before,
+.pc-calm *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-root *,
+  .pc-root *::before,
+  .pc-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .pc-story-card { padding: 24px 20px !important; }
+  .pc-big-title { font-size: 40px !important; }
+  .pc-home-greet { font-size: 30px !important; }
+  .pc-chip { font-size: 15px !important; padding: 7px 14px !important; }
+}
+
+/* The shared trust line sits on Pupclaw's cream, not its own strip. */
+.pc-trust p {
+  background: transparent !important;
+  padding-bottom: 0 !important;
+}
+.pc-root ul.pc-list {
+  list-style: disc;
+}

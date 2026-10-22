@@ -17,6 +17,7 @@ import { KidTrustLine } from './components/site/KidTrustLine';
 import { ManifestoPage } from './pages/ManifestoPage';
 import { GovernancePage } from './pages/GovernancePage';
 import { ChildSafetyPage } from './pages/ChildSafetyPage';
+import { PupclawApp } from './pupclaw/PupclawApp';
 import { titleOf, useRoute } from './router';
 
 const SETTINGS_STORAGE_KEY = 'misses_trollz_settings_v1';
@@ -152,6 +153,9 @@ export default function App() {
       speakText(`Hi! I am ${presentation.name}. Tap a big button below to play with me! If anyone needs help, please tell a nurse or caregiver right away.`);
     }
   };
+
+  // Pupclaw: the tap-only puppy play-pal for little learners, same safety rules.
+  if (route === 'pupclaw') return <PupclawApp />;
 
   if (route !== 'play') {
     return (
