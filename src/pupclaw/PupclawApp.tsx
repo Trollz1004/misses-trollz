@@ -228,6 +228,19 @@ export const PupclawApp: React.FC = () => {
   useEffect(() => {
     if (breakDue) document.querySelector<HTMLButtonElement>('button[aria-label="All done stretching"]')?.focus();
   }, [breakDue]);
+  // The Grown-up needed screen takes focus itself (not a button, so a stray key press
+  // cannot close it), and focus comes back to the Grown-up needed button afterwards.
+  const wasNeeded = useRef(false);
+  useEffect(() => {
+    if (grownUpNeeded) {
+      const dialog = document.querySelector<HTMLElement>('[role="alertdialog"]');
+      dialog?.setAttribute('tabindex', '-1');
+      dialog?.focus();
+    } else if (wasNeeded.current) {
+      document.querySelector<HTMLButtonElement>('button[aria-label="Grown-up needed"]')?.focus();
+    }
+    wasNeeded.current = grownUpNeeded;
+  }, [grownUpNeeded]);
 
   const go = (s: Screen) => {
     stopSpeaking();

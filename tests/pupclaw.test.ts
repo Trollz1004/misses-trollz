@@ -187,6 +187,7 @@ test('Grown-up needed stays on top and pauses everything', () => {
   assert.equal(Math.max(...zs), 100, 'nothing in Pupclaw sits above the safety screen');
   assert.match(app, /if \(paused\.current\) return/, 'speech is silenced while paused');
   assert.match(app, /inert=\{grownUpNeeded\}/, 'nothing behind the safety screen can be tabbed to or pressed');
+  assert.match(app, /querySelector<HTMLElement>\('\[role="alertdialog"\]'\)[\s\S]{0,120}dialog\?\.focus\(\)/, 'focus moves into the safety screen when it opens');
 });
 
 test('an adventure ending only mentions things every play level has met', () => {
