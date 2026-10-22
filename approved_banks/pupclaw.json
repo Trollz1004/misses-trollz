@@ -22,7 +22,7 @@
     {
       "id": "pc-theme-space", "label": "Outer Space", "art": "🚀", "bands": ["little", "bright", "big"],
       "short": { "title": "Your Rocket to the Moon", "paras": ["You and Pupclaw built a rocket out of a big cardboard box. Three, two, one, blast off!", "Zoom! You flew past twinkly stars.", "On the moon, you bounced up high. Boing! Boing! Pupclaw found a moon rock shaped like a bone.", "Then you zoomed home for a cozy nap. The end!"] },
-      "long": { "title": "The Lost Little Star", "paras": ["One night you and Pupclaw climbed into a rocket made from a cardboard box, a colander and a lot of tape. Three, two, one, blast off! You zoomed past the clouds and into the sparkly sky.", "Out among the planets you met a tiny star who had wandered away from her family. She was glowing very softly because she missed them. Pupclaw gave a gentle woof. Don't worry, we will help you find them!", "You flew past a ringed planet and a moon that looked like a giant button, until you saw a whole twinkly family waving their light. The little star zipped home and glowed her brightest glow. On the way back to Earth, every star in the sky winked at you to say thank you."] }
+      "long": { "title": "The Lost Little Star", "paras": ["One night you and Pupclaw climbed into a rocket made from a cardboard box, a bucket and a lot of tape. Three, two, one, blast off! You zoomed past the clouds and into the sparkly sky.", "Out among the planets you met a tiny star who had wandered away from her family. She was glowing very softly because she missed them. Pupclaw gave a gentle woof. Don't worry, we will help you find them!", "You flew past a ringed planet and a moon that looked like a giant button, until you saw a whole twinkly family waving their light. The little star zipped home and glowed her brightest glow. On the way back to Earth, every star in the sky winked at you to say thank you."] }
     },
     {
       "id": "pc-theme-sea", "label": "Under the Sea", "art": "🐳", "bands": ["little", "bright", "big"],
@@ -52,7 +52,7 @@
     {
       "id": "pc-theme-robots", "label": "Robots", "art": "🤖", "bands": ["little", "bright", "big"],
       "short": { "title": "Your Robot Helper", "paras": ["You and Pupclaw built a little robot. It went beep, boop, beep!", "It helped you stack your blocks up high.", "It even danced the robot dance. Beep, boop! Pupclaw danced too, with very wiggly paws.", "Then the robot said, Good night! The end!"] },
-      "long": { "title": "Bolt Learns to Laugh", "paras": ["In your garage, you and Pupclaw built a robot from tin cans, buttons and a kitchen timer. You named him Bolt. Bolt could stack blocks, water plants and count to a million, but he did not know how to laugh.", "You told him your best joke. Bolt just blinked. Pupclaw did his funniest trick, rolling over and landing in a laundry basket. Bolt blinked twice. Then you tickled his metal tummy with a feather.", "Something went click inside Bolt, and out came a sound like a happy bicycle bell. Ha ha ding! Bolt was laughing! After that he laughed at every joke, even the silly ones, and that made everyone laugh even more."] }
+      "long": { "title": "Bolt Learns to Laugh", "paras": ["In your garage, you and Pupclaw built a robot from tin cans, buttons and an old alarm clock. You named him Bolt. Bolt could stack blocks, water plants and count to a million, but he did not know how to laugh.", "You told him your best joke. Bolt just blinked. Pupclaw did his funniest trick, rolling over and landing in a laundry basket. Bolt blinked twice. Then you tickled his metal tummy with a feather.", "Something went click inside Bolt, and out came a sound like a happy bicycle bell. Ha ha ding! Bolt was laughing! After that he laughed at every joke, even the silly ones, and that made everyone laugh even more."] }
     },
     {
       "id": "pc-theme-mystery", "label": "Mystery Club", "art": "🔍", "bands": ["big"],
@@ -122,7 +122,7 @@
           { "label": "Let Pupclaw open it", "outcome": "Pupclaw pressed his paw on the lock. Click! Inside were glittery paw-print stickers for everyone." },
           { "label": "Open it all together", "outcome": "You all pressed your hands and paws on the lock at once. Click! Inside were glittery paw-print stickers for everyone." } ] }
       ],
-      "ending": "Everyone shared the stickers and laughed until the stars came out. Pupclaw wagged his tail. Best adventure ever, he said. The end!"
+      "ending": "Everyone laughed and played together until the stars came out. Pupclaw wagged his tail. Best adventure ever, he said. The end!"
     },
     {
       "id": "pc-path-kite", "title": "The Runaway Kite",
@@ -207,7 +207,7 @@
     "big": [
       { "q": "Tell me an amazing space fact", "a": "A day on Venus is longer than a year on Venus! It spins so slowly that it goes all the way around the Sun before it finishes one turn." },
       { "q": "Quiz me on animals!", "a": "Quiz time! Which animal can doze standing up? Horses can! They lock their legs so they can nap without tipping over. Did you guess it?" },
-      { "q": "Give me a poem idea", "a": "Try this: write about your favorite place using all five senses. What do you see, hear, smell and feel there? Start with: In my favorite place..." },
+      { "q": "Give me a poem idea", "a": "Try this: write about your favorite place using your senses. What do you see, hear, smell and feel there? Start with: In my favorite place..." },
       { "q": "What's the fastest animal?", "a": "On land, it's the cheetah, which can sprint about as fast as a car on the highway. In the air, the peregrine falcon is even faster when it dives!" },
       { "q": "How do plants grow?", "a": "Plants make their own energy! Their leaves use sunlight, water and air to do it. That is called photosynthesis. Try saying that three times fast!" },
       { "q": "Why is the ocean salty?", "a": "Rain slowly washes tiny bits of minerals from rocks into rivers, and rivers carry them to the sea. Over millions of years, the salt added up!" }
@@ -220,7 +220,7 @@
     { "q": "The more you take from me, the bigger I get. What am I?", "a": "A hole!" },
     { "q": "I get wetter and wetter the more I dry. What am I?", "a": "A towel!" },
     { "q": "What has hands but cannot clap?", "a": "A clock!" },
-    { "q": "What has a neck but no head?", "a": "A bottle!" },
+    { "q": "What has a neck but no head?", "a": "A shirt!" },
     { "q": "What has lots of keys but cannot open a door?", "a": "A piano!" },
     { "q": "What is full of holes but still holds water?", "a": "A sponge!" },
     { "q": "I have a head and a tail but no body. What am I?", "a": "A coin!" },
@@ -256,7 +256,7 @@
     { "id": "riddle", "art": "🎈", "name": "Riddle Rascal", "hint": "crack a riddle" },
     { "id": "artist", "art": "🎨", "name": "Artist Paw", "hint": "stamp a paw print" },
     { "id": "peek", "art": "🙈", "name": "Peek Champ", "hint": "play peek-a-boo 5 times" },
-    { "id": "daily", "art": "🌞", "name": "Early Bird", "hint": "hear a daily treat" },
+    { "id": "daily", "art": "🌞", "name": "Early Bird", "hint": "hear the joke or fact of the day" },
     { "id": "bed", "art": "🌙", "name": "Bedtime Star", "hint": "hear a sleepy story" }
   ],
   "stretch": {

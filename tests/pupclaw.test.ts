@@ -186,4 +186,17 @@ test('Grown-up needed stays on top and pauses everything', () => {
   const zs = [...app.matchAll(/zIndex: (\d+)/g)].map((m) => Number(m[1]));
   assert.equal(Math.max(...zs), 100, 'nothing in Pupclaw sits above the safety screen');
   assert.match(app, /if \(paused\.current\) return/, 'speech is silenced while paused');
+  assert.match(app, /inert=\{grownUpNeeded\}/, 'nothing behind the safety screen can be tabbed to or pressed');
+});
+
+test('an adventure ending only mentions things every play level has met', () => {
+  // Little Paws stop after part two, so the ending may not lean on anything first found in parts three or four.
+  const stem = (w: string) => w.toLowerCase().replace(/[^a-z]/g, '').replace(/s$/, '');
+  const COMMON = new Set(['everyone', 'together', 'played', 'laughed', 'happy']);
+  const words = (t: string) => new Set(t.split(/\s+/).map(stem).filter((w) => w.length >= 5 && !COMMON.has(w)));
+  for (const a of ADVENTURES) {
+    const early = words(a.rounds.slice(0, 2).flatMap((r) => [r.intro, ...r.choices.flatMap((c) => [c.label, c.outcome])]).join(' '));
+    const late = words(a.rounds.slice(2).flatMap((r) => [r.intro, ...r.choices.flatMap((c) => [c.label, c.outcome])]).join(' '));
+    for (const w of words(a.ending)) assert.ok(!late.has(w) || early.has(w), `${a.id} ending mentions "${w}", which Little Paws never reach`);
+  }
 });

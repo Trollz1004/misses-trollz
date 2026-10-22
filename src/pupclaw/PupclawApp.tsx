@@ -222,7 +222,7 @@ export const PupclawApp: React.FC = () => {
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('keydown', onKey);
-      document.querySelector<HTMLButtonElement>('button[aria-label^="My sticker book"]')?.focus();
+      if (!paused.current) document.querySelector<HTMLButtonElement>('button[aria-label^="My sticker book"]')?.focus();
     };
   }, [showStickers]);
   useEffect(() => {
@@ -511,7 +511,8 @@ export const PupclawApp: React.FC = () => {
 
   return (
     <>
-      <div className={`pc-root${settings.calm ? ' pc-calm' : ''}`}>
+      {/* inert while Grown-up needed is open: nothing behind it can be tabbed to, read out or pressed. */}
+      <div className={`pc-root${settings.calm ? ' pc-calm' : ''}`} inert={grownUpNeeded}>
         <FloatingPaw style={{ top: 40, left: -20, width: 120, color: '#F3DFC2', animation: 'hopc-float 7s ease-in-out infinite' }} />
         <FloatingPaw style={{ top: 200, right: -30, width: 150, color: '#F3DFC2', animation: 'hopc-float 9s ease-in-out infinite' }} />
         <FloatingPaw style={{ bottom: 60, left: '8%', width: 90, color: '#F6E6CC', animation: 'hopc-float 8s ease-in-out infinite' }} />
@@ -1128,6 +1129,7 @@ export const PupclawApp: React.FC = () => {
               <div style={{ fontSize: 19, fontWeight: 700, margin: '10px 0 24px', color: BROWN }}>
                 {young ? STRETCH.young : STRETCH.older}
               </div>
+              <CaregiverNote center />
               <Btn
                 onClick={() => {
                   boop();

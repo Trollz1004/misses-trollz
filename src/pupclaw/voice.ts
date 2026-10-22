@@ -69,7 +69,10 @@ export function speak(text: string, opts: { voice: VoiceId; rate: number; onEnd?
     u.lang = choice !== 'default' ? choice.lang : 'en-US';
     u.pitch = def.pitch;
     u.rate = opts.rate * (def.rateMul ?? 1);
-    if (opts.onEnd) u.onend = opts.onEnd;
+    if (opts.onEnd) {
+      u.onend = opts.onEnd;
+      u.onerror = opts.onEnd;
+    }
     window.speechSynthesis.speak(u);
   } catch {
     // Read-aloud is a nice extra; the words are always on screen.
