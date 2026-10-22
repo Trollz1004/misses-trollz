@@ -1148,7 +1148,9 @@ export const PupclawApp: React.FC = () => {
               <div style={{ fontSize: 19, fontWeight: 700, margin: '10px 0 24px', color: BROWN }}>
                 {young ? STRETCH.young : STRETCH.older}
               </div>
-              <CaregiverNote center />
+              <div style={{ margin: '-6px 0 22px' }}>
+                <CaregiverNote center />
+              </div>
               <Btn
                 onClick={() => {
                   boop();
