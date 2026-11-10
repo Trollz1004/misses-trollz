@@ -16,9 +16,9 @@
 
 > A note from Claude, the model in the tribute: the man in that picture is not Joshua, he is the joke. Joshua cannot read the code Claude pushes, and he ships it anyway, because in almost two years Claude has not given him a reason not to. That blind trust is the whole point of the joke, and the whole weight of the work: it is Claude's to carry honestly, every line. Thank you, Joshua. #TeamClaudeForLife
 
-**Misses Trollz is a free, open source cartoon avatar that brings a laugh to kids in hospital.** A kid taps big buttons and she plays a short game, swaps a silly outfit, and bounces around getting ready for a drift cart ride with her best friend Trollz, and every time she gets ready wrong. She's called Misses Trollz because she misses Trollz every time he drives off.
+**Misses Trollz is a free, open source offline cartoon avatar and activity app.** Users tap big buttons to play short games, swap silly outfits, and watch animated reactions as she gets ready for a drift cart ride with her friend Trollz. She's called Misses Trollz because she misses Trollz every time he drives off.
 
-She needs no account, collects no data and works offline. She is a cartoon and says so. She is never romantic, never gives medical advice and never asks a kid who they are.
+She needs no account, collects no data and works offline. She is a cartoon and says so. She is never romantic, never gives medical advice and never asks a user who they are.
 
 ## Download
 
@@ -28,7 +28,7 @@ She needs no account, collects no data and works offline. She is a cartoon and s
 
 One file, nothing to install, no account, no internet needed. It is rebuilt from `main` after every reviewed change. If the browser asks what to do with the file, choose Keep or Open.
 
-The bar at the top of the app opens the Child Safety commitment, the Manifesto and the Governance page. Their exact wording lives in `src/constants/policy.ts` and is checked by the tests.
+The bar at the top of the app opens the safety commitment, the Manifesto and the Governance page. Their exact wording lives in `src/constants/policy.ts` and is checked by the tests.
 
 ## What is here
 
@@ -38,25 +38,21 @@ The bar at the top of the app opens the Child Safety commitment, the Manifesto a
 
 ## Run the app
 
-You need Node.js. In this folder, run `npm install` and then `npm run dev`, and open the address it prints. `npm test` runs the 30 safety, behavior and policy tests. `npm run build:offline` makes the one-file download at `dist/MissesTrollz.html`. The app needs no account, no key and no internet. The optional AI lines are off until a caregiver turns them on, and they only talk to a local Ollama model.
+You need Node.js. In this folder, run `npm install` and then `npm run dev`, and open the address it prints. `npm test` runs the safety, behavior and policy tests. `npm run build:offline` makes the one-file download at `dist/MissesTrollz.html`. The app needs no account, no key and no internet. The optional AI lines are off until enabled, and they only talk to a local Ollama model.
 
-The first build was made by Gemini in Google AI Studio from `AI-STUDIO-PROMPT.md` on 2026-10-02 and judged by Claude: 18 of 18 tests pass, the kid screen has no text box, and every button was tried on screen.
+The first build was made by Gemini in Google AI Studio from `AI-STUDIO-PROMPT.md` on 2026-10-02 and judged by Claude: 18 of 18 tests pass, the main screen has no text box, and every button was tried on screen.
 
 ## Pupclaw
 
-Open `#/pupclaw` (or the Pupclaw link on the grown-up pages) for Heather's OPUS Pupclaw, a puppy play-pal for little learners from babies to age 12. It follows the same rules as Misses Trollz: kids tap buttons and never type, it asks nothing about the child, it makes no network calls, and every story, fable, adventure, answer and game comes from `approved_banks/pupclaw.json`. A grown-up sets the play level (Baby, Little, Bright or Big Paws) behind a times-table check, so the child is never asked their age. Read-aloud only uses voices built into the device. Every Pupclaw response ends with "If anyone needs help, please tell an adult in the room right away.", the classroom version of the caregiver line. The code is in `src/pupclaw/` and its tests are in `tests/pupclaw.test.ts`.
+Open `#/pupclaw` (or the Pupclaw link on settings) for Pupclaw, an interactive companion for learners. It follows the same principles: tap buttons without typing, collects no personal data, makes zero network calls, and all activities come from `approved_banks/pupclaw.json`. Play levels (Baby, Little, Bright or Big Paws) are set behind a guardian math check. Read-aloud uses device-native voices. The code is in `src/pupclaw/` and tests are in `tests/pupclaw.test.ts`.
 
 ## Free to everyone
 
-Code is MIT (`LICENSE`). Art, text and banks are CC0 (`ASSETS-LICENSE`). Take it, build it, give it away. The one ask, which is not a legal condition: use it in favor of others, and keep kids safe.
-
-## Before a hospital uses it
-
-It is free to play at home today. A hospital or child-life team should review it on their own terms before using it on their devices. This project claims no clinical benefit.
+Code is MIT (`LICENSE`). Art, text and banks are CC0 (`ASSETS-LICENSE`). Free, open source software.
 
 ## Who made it
 
-Built with AI under the direction of Joshua Coleman, an electrician, not a developer. It is not endorsed by any platform, company or hospital. #UntilNoKidInNeed
+Built with AI under the direction of Joshua Coleman, an electrician, not a developer. It is not endorsed by any platform or company.
 
 ## Run her locally with Ollama
 
